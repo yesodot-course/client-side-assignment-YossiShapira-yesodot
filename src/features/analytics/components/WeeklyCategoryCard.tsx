@@ -1,8 +1,8 @@
-﻿import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+﻿import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { useWeeklyCategory } from "../hooks/useWeeklyCategory";
 
 export function WeeklyCategoryCard(): JSX.Element {
-  const { data, isLoading } = useWeeklyCategory();
+  const { data, isLoading, isError } = useWeeklyCategory();
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
@@ -15,6 +15,10 @@ export function WeeklyCategoryCard(): JSX.Element {
           <Box sx={{ py: 1 }}>
             <CircularProgress size={22} />
           </Box>
+        ) : isError ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            לא ניתן לטעון נתוני קטגוריה שבועית.
+          </Alert>
         ) : data ? (
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             {data._id} (${data.totalProfit.toFixed(2)})

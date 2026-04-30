@@ -1,8 +1,8 @@
-﻿import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+﻿import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { useDailyItem } from "../hooks/useDailyItem";
 
 export function DailyItemCard(): JSX.Element {
-  const { data, isLoading } = useDailyItem();
+  const { data, isLoading, isError } = useDailyItem();
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
@@ -15,6 +15,10 @@ export function DailyItemCard(): JSX.Element {
           <Box sx={{ py: 1 }}>
             <CircularProgress size={22} />
           </Box>
+        ) : isError ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            לא ניתן לטעון נתוני פריט יומי.
+          </Alert>
         ) : data ? (
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             {data.itemName} (${data.totalProfit.toFixed(2)})

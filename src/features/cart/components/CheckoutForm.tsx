@@ -8,6 +8,9 @@ import { useCreateOrder } from "../../orders/hooks/useCreateOrder";
 import { selectCartItems } from "../selectors/cart.selectors";
 import { clearCart } from "../store/cart.slice";
 
+const MAX_UNIQUE_ORDER_ITEMS = 10;
+const MAX_TOTAL_ORDER_ITEMS = 50;
+
 export function CheckoutForm(): JSX.Element {
   const dispatch = useAppDispatch();
   const items = useAppSelector(selectCartItems);
@@ -26,6 +29,19 @@ export function CheckoutForm(): JSX.Element {
     }
     if (address.trim().length < 5) {
       showToast("יש להזין כתובת תקינה (לפחות 5 תווים).");
+      return;
+    }
+    if (items.some((item) => !Number.isInteger(item.quantity) || item.quantity < 1)) {
+      showToast("כמות לכל פריט חייבת להיות מספר שלם וחיובי.");
+      return;
+    }
+    if (items.length > MAX_UNIQUE_ORDER_ITEMS) {
+      showToast("ניתן להזמין עד 10 פריטים שונים בכל הזמנה.");
+      return;
+    }
+    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+    if (totalQuantity > MAX_TOTAL_ORDER_ITEMS) {
+      showToast("ניתן להזמין עד 50 יחידות בסך הכל בכל הזמנה.");
       return;
     }
 

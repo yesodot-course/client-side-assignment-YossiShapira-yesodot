@@ -1,8 +1,8 @@
-﻿import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+﻿import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { useMarginItems } from "../hooks/useMarginItems";
 
 export function MarginItemsCard(): JSX.Element {
-  const { data, isLoading } = useMarginItems();
+  const { data, isLoading, isError } = useMarginItems();
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
@@ -15,6 +15,10 @@ export function MarginItemsCard(): JSX.Element {
           <Box sx={{ py: 1 }}>
             <CircularProgress size={22} />
           </Box>
+        ) : isError ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            לא ניתן לטעון נתוני שיעור רווח.
+          </Alert>
         ) : (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1, alignItems: "flex-end", width: "100%" }}>
             <Typography>
