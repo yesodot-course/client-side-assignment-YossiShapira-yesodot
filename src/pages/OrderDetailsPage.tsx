@@ -15,6 +15,9 @@ type EditableOrderItem = {
   quantity: string;
 };
 
+const MAX_UNIQUE_ORDER_ITEMS = 10;
+const MAX_TOTAL_ORDER_ITEMS = 50;
+
 const getOrderItemId = (item: string | OrderItemRef): string => {
   if (typeof item === "string") {
     return item;
@@ -71,13 +74,22 @@ export function OrderDetailsPage(): JSX.Element {
       showToast("יש להזמנה לפחות פריט אחד.");
       return null;
     }
-    if (parsed.some((entry) => !entry.item || !Number.isFinite(entry.quantity) || entry.quantity < 1)) {
-      showToast("יש להזין פריטים וכמויות תקינות.");
+    if (parsed.some((entry) => !entry.item || !Number.isInteger(entry.quantity) || entry.quantity < 1)) {
+      showToast("יש להזין פריטים וכמויות תקינות (מספרים שלמים וחיוביים בלבד).");
       return null;
     }
     const uniqueItems = new Set(parsed.map((entry) => entry.item));
     if (uniqueItems.size !== parsed.length) {
       showToast("אין להזין אותו פריט פעמיים.");
+      return null;
+    }
+    if (parsed.length > MAX_UNIQUE_ORDER_ITEMS) {
+      showToast("ניתן להזין עד 10 פריטים שונים בכל הזמנה.");
+      return null;
+    }
+    const totalQuantity = parsed.reduce((sum, entry) => sum + entry.quantity, 0);
+    if (totalQuantity > MAX_TOTAL_ORDER_ITEMS) {
+      showToast("ניתן להזין עד 50 יחידות בסך הכל בכל הזמנה.");
       return null;
     }
     return parsed;

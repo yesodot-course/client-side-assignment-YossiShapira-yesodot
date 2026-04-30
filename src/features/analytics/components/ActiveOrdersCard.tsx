@@ -1,8 +1,8 @@
-import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { useOrders } from "../../orders/hooks/useOrders";
 
 export function ActiveOrdersCard(): JSX.Element {
-  const { data, isLoading } = useOrders();
+  const { data, isLoading, isError } = useOrders();
   const orders = data ?? [];
   const activeOrdersCount = orders.filter((order) => (order.status ?? "Pending") === "Pending").length;
 
@@ -17,6 +17,10 @@ export function ActiveOrdersCard(): JSX.Element {
           <Box sx={{ py: 1 }}>
             <CircularProgress size={22} />
           </Box>
+        ) : isError ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            לא ניתן לטעון נתוני הזמנות.
+          </Alert>
         ) : (
           <Typography variant="h4" sx={{ fontWeight: 700 }}>
             {activeOrdersCount}

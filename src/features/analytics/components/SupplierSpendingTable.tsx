@@ -1,4 +1,5 @@
 ﻿import {
+  Alert,
   Paper,
   Table,
   TableBody,
@@ -11,10 +12,16 @@
 import { useSupplierSpending } from "../hooks/useSupplierSpending";
 
 export function SupplierSpendingTable(): JSX.Element {
-  const { data, isLoading } = useSupplierSpending();
+  const { data, isLoading, isError } = useSupplierSpending();
 
   if (isLoading) {
     return <Typography>טוען נתוני הוצאות לספקים...</Typography>;
+  }
+  if (isError) {
+    return <Alert severity="error">לא ניתן לטעון נתוני הוצאות לספקים.</Alert>;
+  }
+  if (!data || data.length === 0) {
+    return <Alert severity="info">עדיין אין נתונים להצגה.</Alert>;
   }
 
   return (
@@ -31,7 +38,7 @@ export function SupplierSpendingTable(): JSX.Element {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(data ?? []).map((row) => (
+            {data.map((row) => (
               <TableRow key={row.supplierName}>
                 <TableCell>{row.supplierName}</TableCell>
                 <TableCell>${row.totalSpent.toFixed(2)}</TableCell>

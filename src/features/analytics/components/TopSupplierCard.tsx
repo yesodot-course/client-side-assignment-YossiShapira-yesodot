@@ -1,8 +1,8 @@
-﻿import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+﻿import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
 import { useTopSupplier } from "../hooks/useTopSupplier";
 
 export function TopSupplierCard(): JSX.Element {
-  const { data, isLoading } = useTopSupplier();
+  const { data, isLoading, isError } = useTopSupplier();
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
@@ -15,6 +15,10 @@ export function TopSupplierCard(): JSX.Element {
           <Box sx={{ py: 1 }}>
             <CircularProgress size={22} />
           </Box>
+        ) : isError ? (
+          <Alert severity="error" sx={{ width: "100%" }}>
+            לא ניתן לטעון נתוני ספק מוביל.
+          </Alert>
         ) : data ? (
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
             {data.supplierName} (${data.totalProfit.toFixed(2)})

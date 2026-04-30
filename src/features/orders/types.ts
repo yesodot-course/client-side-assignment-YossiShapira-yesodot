@@ -1,4 +1,6 @@
-﻿export interface CreateOrderItemInput {
+﻿export type OrderStatus = "Pending" | "Completed" | "Cancelled";
+
+export interface CreateOrderItemInput {
   item: string;
   quantity: number;
 }
@@ -13,7 +15,7 @@ export interface UpdateOrderInput {
   customerId?: string;
   address?: string;
   items?: CreateOrderItemInput[];
-  status?: "Pending" | "Completed" | "Cancelled";
+  status?: OrderStatus;
 }
 
 export interface OrderItemRef {
@@ -37,7 +39,7 @@ export interface Order {
   _id: string;
   customerId: string;
   address: string;
-  status?: string;
+  status?: OrderStatus;
   openedAt?: string;
   closedAt?: string;
   totalPrice: number;
