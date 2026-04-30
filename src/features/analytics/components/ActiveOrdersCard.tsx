@@ -1,0 +1,28 @@
+import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+import { useOrders } from "../../orders/hooks/useOrders";
+
+export function ActiveOrdersCard(): JSX.Element {
+  const { data, isLoading } = useOrders();
+  const orders = data ?? [];
+  const activeOrdersCount = orders.filter((order) => (order.status ?? "Pending") === "Pending").length;
+
+  return (
+    <Card variant="outlined" sx={{ height: "100%" }}>
+      <CardContent sx={{ p: 2.5, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.25 }}>
+          הזמנות פעילות
+        </Typography>
+        <Divider sx={{ mb: 1.5 }} />
+        {isLoading ? (
+          <Box sx={{ py: 1 }}>
+            <CircularProgress size={22} />
+          </Box>
+        ) : (
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            {activeOrdersCount}
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
+  );
+}

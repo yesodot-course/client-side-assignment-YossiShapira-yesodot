@@ -1,0 +1,28 @@
+﻿import { Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+import { useDailyItem } from "../hooks/useDailyItem";
+
+export function DailyItemCard(): JSX.Element {
+  const { data, isLoading } = useDailyItem();
+
+  return (
+    <Card variant="outlined" sx={{ height: "100%" }}>
+      <CardContent sx={{ p: 2.5, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.25 }}>
+          המוצר הרווחי ביותר (24 שעות)
+        </Typography>
+        <Divider sx={{ mb: 1.5 }} />
+        {isLoading ? (
+          <Box sx={{ py: 1 }}>
+            <CircularProgress size={22} />
+          </Box>
+        ) : data ? (
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            {data.itemName} (${data.totalProfit.toFixed(2)})
+          </Typography>
+        ) : (
+          <Typography color="text.secondary">עדיין אין נתונים</Typography>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
