@@ -1,4 +1,5 @@
 ﻿import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { rtlOutlinedFormControlSx, rtlSelectInputProps, rtlSelectMenuProps } from "../../../shared/ui/rtlOutlinedField";
 
 export type SortValue = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
@@ -9,13 +10,15 @@ interface ItemSortProps {
 
 export function ItemSort({ value, onChange }: ItemSortProps): JSX.Element {
   return (
-    <FormControl sx={{ minWidth: 240 }}>
+    <FormControl fullWidth sx={rtlOutlinedFormControlSx}>
       <InputLabel id="sort-label">מיון</InputLabel>
       <Select
         labelId="sort-label"
         value={value}
         label="מיון"
         onChange={(event) => onChange(event.target.value as SortValue)}
+        inputProps={rtlSelectInputProps}
+        MenuProps={rtlSelectMenuProps}
       >
         <MenuItem value="name-asc">שם (א-ת)</MenuItem>
         <MenuItem value="name-desc">שם (ת-א)</MenuItem>
