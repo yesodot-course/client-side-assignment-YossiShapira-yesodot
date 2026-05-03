@@ -8,7 +8,7 @@ import { CheckoutForm } from "../features/cart/components/CheckoutForm";
 export function CartPage(): JSX.Element {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <Typography variant="h4" sx={{ alignSelf: "flex-end", textAlign: "right" }}>
+      <Typography variant="h4" sx={{ alignSelf: "flex-start", textAlign: "start" }}>
         העגלה שלך
       </Typography>
 

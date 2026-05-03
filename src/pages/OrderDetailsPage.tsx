@@ -7,6 +7,7 @@ import { useOrderDetails } from "../features/orders/hooks/useOrderDetails";
 import { useUpdateOrder } from "../features/orders/hooks/useUpdateOrder";
 import { useItems } from "../features/items/hooks/useItems";
 import { showToast } from "../shared/ui/feedback/toast";
+import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../shared/ui/rtlOutlinedField";
 import { ApiError } from "../shared/api/apiError";
 import type { CreateOrderItemInput, OrderItemRef } from "../features/orders/types";
 
@@ -155,11 +156,11 @@ export function OrderDetailsPage(): JSX.Element {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "right" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
       <Button
         variant="text"
         endIcon={<ArrowForwardIosIcon fontSize="small" />}
-        sx={{ alignSelf: "flex-end" }}
+        sx={{ alignSelf: "flex-start" }}
         onClick={() => navigate("/admin?tab=orders")}
       >
         חזרה להזמנות
@@ -176,71 +177,84 @@ export function OrderDetailsPage(): JSX.Element {
         {editableItems.length === 0 ? (
           <Alert severity="info">אין כרגע פריטים בהזמנה. אפשר להוסיף פריט חדש.</Alert>
         ) : null}
-        {editableItems.map((entry, index) => (
-          <Box key={`${entry.item}-${index}`} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Box sx={{ width: 42, height: 42, flexShrink: 0 }}>
-              {entry.item && itemsMap.get(entry.item)?.imageUrl ? (
-                <Avatar
-                  variant="rounded"
-                  src={itemsMap.get(entry.item)?.imageUrl ?? undefined}
-                  alt={itemsMap.get(entry.item)?.name ?? "תמונת מוצר"}
-                  sx={{ width: 42, height: 42, bgcolor: "grey.100", color: "text.secondary" }}
-                />
-              ) : null}
-            </Box>
-            <Autocomplete
-              options={availableItems}
-              getOptionLabel={(option) => option.name}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
-              value={availableItems.find((item) => item._id === entry.item) ?? null}
-              onChange={(_event, value) => {
-                setEditableItems((prev) => prev.map((item, i) => (i === index ? { ...item, item: value?._id ?? "" } : item)));
-              }}
-              renderInput={(params) => <TextField {...params} label="פריט" />}
-              renderOption={(props, option) => (
-                <Box component="li" {...props} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {option.imageUrl ? (
+        {editableItems.map((entry, index) => {
+          const selected = entry.item ? itemsMap.get(entry.item) : undefined;
+          return (
+            <Box
+              key={`${entry.item}-${index}`}
+              sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap", direction: "rtl" }}
+            >
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center", flex: 1, minWidth: 200 }}>
+                <Box sx={{ width: 42, height: 42, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {selected?.imageUrl ? (
                     <Avatar
                       variant="rounded"
-                      src={option.imageUrl}
-                      alt={option.name}
-                      sx={{ width: 32, height: 32, bgcolor: "grey.100", color: "text.secondary" }}
+                      src={selected.imageUrl}
+                      alt={selected.name ?? "תמונת מוצר"}
+                      sx={{ width: 42, height: 42, bgcolor: "grey.100", color: "text.secondary" }}
                     />
-                  ) : null}
-                  <span>{option.name}</span>
+                  ) : (
+                    <Box sx={{ width: 42, height: 42 }} aria-hidden />
+                  )}
                 </Box>
-              )}
-              sx={{ flex: 1 }}
-              disabled={isLocked}
-            />
-            <TextField
-              label="כמות"
-              type="number"
-              value={entry.quantity}
-              onChange={(event) => {
-                setEditableItems((prev) => prev.map((item, i) => (i === index ? { ...item, quantity: event.target.value } : item)));
-              }}
-              sx={{ width: 120 }}
-              disabled={isLocked}
-            />
-            <Typography variant="caption" sx={{ minWidth: 120 }}>
-              במלאי: {entry.item ? (itemsMap.get(entry.item)?.stock ?? "-") : "-"}
-            </Typography>
-            <IconButton
-              color="error"
-              onClick={() => setEditableItems((prev) => prev.filter((_, i) => i !== index))}
-              disabled={isLocked}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Box>
-        ))}
+                <Autocomplete
+                  options={availableItems}
+                  getOptionLabel={(option) => option.name}
+                  isOptionEqualToValue={(option, value) => option._id === value._id}
+                  value={availableItems.find((item) => item._id === entry.item) ?? null}
+                  onChange={(_event, value) => {
+                    setEditableItems((prev) => prev.map((item, i) => (i === index ? { ...item, item: value?._id ?? "" } : item)));
+                  }}
+                  renderInput={(params) => <TextField {...params} label="פריט" />}
+                  renderOption={(props, option) => (
+                    <Box component="li" {...props} sx={{ display: "flex", alignItems: "center", gap: 1, direction: "rtl" }}>
+                      {option.imageUrl ? (
+                        <Avatar
+                          variant="rounded"
+                          src={option.imageUrl}
+                          alt={option.name}
+                          sx={{ width: 32, height: 32, bgcolor: "grey.100", color: "text.secondary", flexShrink: 0 }}
+                        />
+                      ) : null}
+                      <span>{option.name}</span>
+                    </Box>
+                  )}
+                  sx={{ flex: 1, minWidth: 0 }}
+                  disabled={isLocked}
+                />
+              </Box>
+              <TextField
+                label="כמות"
+                type="number"
+                variant="outlined"
+                dir="rtl"
+                value={entry.quantity}
+                onChange={(event) => {
+                  setEditableItems((prev) => prev.map((item, i) => (i === index ? { ...item, quantity: event.target.value } : item)));
+                }}
+                sx={{ ...rtlOutlinedTextFieldSx, width: 120 }}
+                slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
+                disabled={isLocked}
+              />
+              <Typography variant="caption" sx={{ minWidth: 120 }}>
+                במלאי: {entry.item ? (selected?.stock ?? "-") : "-"}
+              </Typography>
+              <IconButton
+                color="error"
+                onClick={() => setEditableItems((prev) => prev.filter((_, i) => i !== index))}
+                disabled={isLocked}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          );
+        })}
 
         <Button variant="outlined" onClick={() => setEditableItems((prev) => [...prev, { item: "", quantity: "1" }])} disabled={isLocked}>
           הוסף פריט
         </Button>
 
-        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
+        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-start" }}>
           <Button variant="contained" onClick={() => submitUpdate("Pending")} disabled={isLocked || updateOrderMutation.isPending}>
             שמור שינויים
           </Button>

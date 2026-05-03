@@ -2,9 +2,6 @@
 import {
   Box,
   Button,
-  IconButton,
-  Menu,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -16,29 +13,23 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 import { useSuppliers } from "../hooks/useSuppliers";
 import { useSearchSuppliers } from "../hooks/useSearchSuppliers";
 import { useCreateSupplier } from "../hooks/useCreateSupplier";
-import { useDeleteSupplier } from "../hooks/useDeleteSupplier";
-import { useUpdateSupplier } from "../hooks/useUpdateSupplier";
 import { SupplierFormModal } from "./SupplierFormModal";
-import type { Supplier, SupplierInput } from "../types";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { ApiError } from "../../../shared/api/apiError";
 
 export function SupplierTable(): JSX.Element {
+  const navigate = useNavigate();
   const { data, isLoading } = useSuppliers();
   const createSupplierMutation = useCreateSupplier();
-  const updateSupplierMutation = useUpdateSupplier();
-  const deleteSupplierMutation = useDeleteSupplier();
   const [searchTerm, setSearchTerm] = useState("");
   const searchSuppliersQuery = useSearchSuppliers(searchTerm);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
-  const [actionSupplier, setActionSupplier] = useState<Supplier | null>(null);
-  const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const rows = useMemo(() => {
     if (searchTerm.trim().length > 0) {
@@ -47,12 +38,6 @@ export function SupplierTable(): JSX.Element {
     return data ?? [];
   }, [data, searchSuppliersQuery.data, searchTerm]);
 
-  const toInput = (supplier: Supplier): SupplierInput => ({
-    name: supplier.name,
-    contactInfo: supplier.contactInfo,
-    items: supplier.items,
-  });
-
   if (isLoading) {
     return <Typography>טוען ספקים...</Typography>;
   }
@@ -60,51 +45,63 @@ export function SupplierTable(): JSX.Element {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
+        <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "start" }}>
           ספקים
         </Typography>
         <Paper variant="outlined" sx={{ p: 2.5 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)} sx={{ mb: 2 }}>
-            הוסף ספק
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+            <Button variant="contained" endIcon={<AddIcon fontSize="small" />} onClick={() => setIsCreateOpen(true)}>
+              הוסף ספק
+            </Button>
+          </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
+              id="admin-suppliers-search"
               label="חיפוש ספקים (שם/פרטי קשר)"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               fullWidth
-              slotProps={{ htmlInput: { dir: "rtl" } }}
-              sx={{ "& .MuiInputBase-input": { textAlign: "right" } }}
+              variant="outlined"
+              dir="rtl"
+              sx={{
+                direction: "rtl",
+                "& .MuiOutlinedInput-input": { textAlign: "right" },
+                "& .MuiOutlinedInput-notchedOutline": { textAlign: "right" },
+                "& label.MuiInputLabel-root": {
+                  left: "auto",
+                  right: 14,
+                  transformOrigin: "top right",
+                },
+                "& label.MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                  transform: "translate(0, 16px) scale(1)",
+                },
+                "& label.MuiInputLabel-root.MuiInputLabel-shrink": {
+                  transform: "translate(0, -9px) scale(0.75)",
+                },
+              }}
+              slotProps={{ htmlInput: { dir: "rtl", style: { textAlign: "right" } } }}
             />
           </Box>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+            <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell />
-                  <TableCell>שם</TableCell>
-                  <TableCell>פרטי קשר</TableCell>
-                  <TableCell>פריטי קטלוג</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>שם</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פרטי קשר</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פריטי קטלוג</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows.map((supplier) => (
-                  <TableRow key={supplier._id}>
-                    <TableCell sx={{ width: 56 }}>
-                      <IconButton
-                        size="small"
-                        aria-label="פעולות ספק"
-                        onClick={(event) => {
-                          setActionSupplier(supplier);
-                          setMenuAnchorEl(event.currentTarget);
-                        }}
-                      >
-                        ⋮
-                      </IconButton>
-                    </TableCell>
-                    <TableCell>{supplier.name}</TableCell>
-                    <TableCell>{supplier.contactInfo}</TableCell>
-                    <TableCell>{supplier.items.length}</TableCell>
+                  <TableRow
+                    key={supplier._id}
+                    hover
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/suppliers/${supplier._id}`)}
+                  >
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.name}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.contactInfo}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.items.length}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -127,62 +124,6 @@ export function SupplierTable(): JSX.Element {
           )
         }
       />
-
-      <SupplierFormModal
-        open={Boolean(editingSupplier)}
-        onClose={() => setEditingSupplier(null)}
-        initialValue={editingSupplier ? toInput(editingSupplier) : undefined}
-        submitLabel="עדכון"
-        onSubmit={(value) => {
-          if (!editingSupplier) {
-            return;
-          }
-          updateSupplierMutation.mutate(
-            { id: editingSupplier._id, payload: value },
-            {
-              onSuccess: () => showToast("הספק עודכן"),
-              onError: (error) => showToast(error instanceof ApiError ? error.message : "עדכון ספק נכשל"),
-            }
-          );
-        }}
-      />
-      <Menu
-        anchorEl={menuAnchorEl}
-        open={Boolean(menuAnchorEl) && Boolean(actionSupplier)}
-        onClose={() => {
-          setMenuAnchorEl(null);
-          setActionSupplier(null);
-        }}
-      >
-        <MenuItem
-          onClick={() => {
-            if (!actionSupplier) {
-              return;
-            }
-            setEditingSupplier(actionSupplier);
-            setMenuAnchorEl(null);
-            setActionSupplier(null);
-          }}
-        >
-          ערוך
-        </MenuItem>
-        <MenuItem
-          sx={{ color: "error.main" }}
-          onClick={() => {
-            if (!actionSupplier) {
-              return;
-            }
-            deleteSupplierMutation.mutate(actionSupplier._id, {
-              onSuccess: () => showToast("הספק נמחק"),
-              onError: (error) => showToast(error instanceof ApiError ? error.message : "מחיקת ספק נכשלה"),
-            });
-            setMenuAnchorEl(null);
-            setActionSupplier(null);
-          }}
-        >
-          מחק
-        </MenuItem>
-      </Menu>
     </>
   );
 }

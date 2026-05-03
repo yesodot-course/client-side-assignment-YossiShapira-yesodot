@@ -8,6 +8,7 @@ import { HomePage } from "../../pages/HomePage";
 import { NotFoundPage } from "../../pages/NotFoundPage";
 import { OrderDetailsPage } from "../../pages/OrderDetailsPage";
 import { ProductDetailsPage } from "../../pages/ProductDetailsPage";
+import { SupplierDetailsPage } from "../../pages/SupplierDetailsPage";
 
 export function AppRouter(): JSX.Element {
   return (
@@ -19,6 +20,7 @@ export function AppRouter(): JSX.Element {
           <Route path={routePaths.cart} element={<CartPage />} />
           <Route path={routePaths.admin} element={<AdminPage />} />
           <Route path={routePaths.orderDetails} element={<OrderDetailsPage />} />
+          <Route path={routePaths.supplierDetails} element={<SupplierDetailsPage />} />
           <Route path={routePaths.notFound} element={<NotFoundPage />} />
         </Routes>
       </AppLayout>

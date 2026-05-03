@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import type { Item } from "../../items/types";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { AddToCartPanel } from "./AddToCartPanel";
 
 interface CartRecommendedProductCardProps {
@@ -62,7 +63,7 @@ export function CartRecommendedProductCard({
         <Typography variant="body2" color="text.secondary">
           ספק: {supplierName}
         </Typography>
-        <Typography sx={{ mt: 0.75 }}>${item.price.toFixed(2)}</Typography>
+        <Typography sx={{ mt: 0.75 }}>{formatCurrency(item.price)}</Typography>
         <Typography variant="body2" color={item.stock > 0 ? "text.secondary" : "error"}>
           מלאי: {item.stock}
         </Typography>
@@ -79,7 +80,7 @@ export function CartRecommendedProductCard({
           mt: "auto",
         }}
       >
-        <Button component={Link} to={`/items/${item._id}`} size="small" sx={{ alignSelf: "flex-end" }}>
+        <Button component={Link} to={`/items/${item._id}`} size="small" sx={{ alignSelf: "flex-start" }}>
           פרטים
         </Button>
         <AddToCartPanel maxQuantity={item.stock} onAdd={(quantity) => onAddToCart(item, quantity)} />

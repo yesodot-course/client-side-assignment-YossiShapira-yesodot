@@ -7,8 +7,9 @@ import { deleteSupplier } from "../api/suppliers.api";
 export function useDeleteSupplier() {
   return useMutation({
     mutationFn: (id: string) => deleteSupplier(id),
-    onSuccess: () => {
+    onSuccess: (_data, id) => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.suppliers });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.supplierById(id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.items });
     },
   });

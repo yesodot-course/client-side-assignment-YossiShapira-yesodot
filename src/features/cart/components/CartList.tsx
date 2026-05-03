@@ -14,8 +14,8 @@ export function CartList(): JSX.Element {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
+    <TableContainer component={Paper} dir="rtl" sx={{ direction: "rtl" }}>
+      <Table dir="rtl" sx={{ direction: "rtl" }}>
         <TableHead>
           <TableRow>
             <TableCell>מוצר</TableCell>

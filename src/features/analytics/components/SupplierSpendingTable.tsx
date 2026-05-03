@@ -9,6 +9,7 @@
   TableRow,
   Typography,
 } from "@mui/material";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { useSupplierSpending } from "../hooks/useSupplierSpending";
 
 export function SupplierSpendingTable(): JSX.Element {
@@ -25,12 +26,12 @@ export function SupplierSpendingTable(): JSX.Element {
   }
 
   return (
-    <Paper variant="outlined" sx={{ p: 2, textAlign: "right", direction: "rtl" }}>
-      <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 700, textAlign: "right" }}>
+    <Paper variant="outlined" sx={{ p: 2, textAlign: "start", direction: "rtl" }}>
+      <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 700, textAlign: "start" }}>
         הוצאות לפי ספק
       </Typography>
-      <TableContainer>
-        <Table size="small">
+      <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+        <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
           <TableHead>
             <TableRow>
               <TableCell>ספק</TableCell>
@@ -41,7 +42,7 @@ export function SupplierSpendingTable(): JSX.Element {
             {data.map((row) => (
               <TableRow key={row.supplierName}>
                 <TableCell>{row.supplierName}</TableCell>
-                <TableCell>${row.totalSpent.toFixed(2)}</TableCell>
+                <TableCell>{formatCurrency(row.totalSpent)}</TableCell>
               </TableRow>
             ))}
           </TableBody>

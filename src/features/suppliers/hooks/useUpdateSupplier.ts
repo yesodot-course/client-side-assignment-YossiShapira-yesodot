@@ -13,8 +13,9 @@ interface UpdateSupplierPayload {
 export function useUpdateSupplier() {
   return useMutation({
     mutationFn: ({ id, payload }: UpdateSupplierPayload) => updateSupplier(id, payload),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       void queryClient.invalidateQueries({ queryKey: queryKeys.suppliers });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.supplierById(variables.id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.items });
     },
   });

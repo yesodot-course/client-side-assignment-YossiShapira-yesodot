@@ -6,6 +6,11 @@ export async function fetchSuppliers(): Promise<Supplier[]> {
   return response.data;
 }
 
+export async function fetchSupplierById(id: string): Promise<Supplier> {
+  const response = await httpClient.get<Supplier>(`/suppliers/${id}`);
+  return response.data;
+}
+
 export async function searchSuppliers(query: string): Promise<Supplier[]> {
   const response = await httpClient.get<Supplier[]>("/suppliers/search/query", {
     params: { q: query },

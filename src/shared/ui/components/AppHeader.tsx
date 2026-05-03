@@ -1,6 +1,18 @@
-﻿import { Link } from "react-router-dom";
+﻿import { IoCartOutline } from "react-icons/io5";
+import { RiAdminLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
+const navIconButtonSx = {
+  minWidth: "auto",
+  lineHeight: 1,
+  px: 0.75,
+  py: 0.55,
+  color: "text.primary",
+  "& svg": { fontSize: "1.55rem", display: "block" },
+} as const;
+
+/** ניווט: IoCartOutline (עגלה) + RiAdminLine (ניהול). aria-label לנגישות */
 export function AppHeader(): JSX.Element {
   return (
     <AppBar position="sticky" color="inherit" elevation={1}>
@@ -13,22 +25,22 @@ export function AppHeader(): JSX.Element {
           gap: 2,
         }}
       >
-        <Box sx={{ display: "flex", gap: 0, direction: "rtl", justifyContent: "flex-start" }}>
-          <Button component={Link} to="/cart" sx={{ minWidth: "auto", fontSize: "1.8rem", p: 0.5 }}>
-            🛒 
-          </Button>
-          <Button component={Link} to="/admin" sx={{ minWidth: "auto", fontSize: "1.8rem", p: 0.5 }}>
-            ⚙️ 
-          </Button>
-        </Box>
         <Button
           component={Link}
           to="/"
           color="inherit"
           sx={{ typography: "h6", whiteSpace: "nowrap", textTransform: "none" }}
         >
-        onlineStore
+          onlineStore
         </Button>
+        <Box sx={{ display: "flex", gap: 0.5, direction: "rtl", justifyContent: "flex-end", alignItems: "center" }}>
+          <Button component={Link} to="/cart" color="inherit" aria-label="עגלה" sx={navIconButtonSx}>
+            <IoCartOutline aria-hidden />
+          </Button>
+          <Button component={Link} to="/admin" color="inherit" aria-label="לוח ניהול" sx={navIconButtonSx}>
+            <RiAdminLine aria-hidden />
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   );

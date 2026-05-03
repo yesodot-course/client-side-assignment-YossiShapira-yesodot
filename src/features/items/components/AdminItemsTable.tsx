@@ -20,6 +20,7 @@ import { useSearchItems } from "../hooks/useSearchItems";
 import { useCreateItem } from "../hooks/useCreateItem";
 import { useDeleteItem } from "../hooks/useDeleteItem";
 import { useUpdateItem } from "../hooks/useUpdateItem";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { ItemFormModal } from "./ItemFormModal";
 import type { Item } from "../types";
 import type { ItemInput } from "../api/items.api";
@@ -61,33 +62,55 @@ export function AdminItemsTable(): JSX.Element {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
+        <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "start" }}>
           מוצרים
         </Typography>
         <Paper variant="outlined" sx={{ p: 2.5 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)} sx={{ mb: 2 }}>
-            הוסף מוצר
-          </Button>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+            <Button variant="contained" endIcon={<AddIcon fontSize="small" />} onClick={() => setIsCreateOpen(true)}>
+              הוסף מוצר
+            </Button>
+          </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
+              id="admin-items-search"
               label="חיפוש מוצרים (שם/קטגוריה)"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               fullWidth
-              slotProps={{ htmlInput: { dir: "rtl" } }}
-              sx={{ "& .MuiInputBase-input": { textAlign: "right" } }}
+              variant="outlined"
+              dir="rtl"
+              sx={{
+                direction: "rtl",
+                "& .MuiOutlinedInput-input": { textAlign: "right" },
+                "& .MuiOutlinedInput-notchedOutline": { textAlign: "right" },
+                /* Mirror MUI’s default left‑anchored label to the right so it sits above the RTL notch */
+                "& label.MuiInputLabel-root": {
+                  left: "auto",
+                  right: 14,
+                  transformOrigin: "top right",
+                },
+                "& label.MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                  transform: "translate(0, 16px) scale(1)",
+                },
+                "& label.MuiInputLabel-root.MuiInputLabel-shrink": {
+                  transform: "translate(0, -9px) scale(0.75)",
+                },
+              }}
+              slotProps={{ htmlInput: { dir: "rtl", style: { textAlign: "right" } } }}
             />
           </Box>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+            <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell />
-                  <TableCell>שם</TableCell>
-                  <TableCell>קטגוריה</TableCell>
-                  <TableCell>מחיר</TableCell>
-                  <TableCell>עלות ספק</TableCell>
-                  <TableCell>מלאי</TableCell>
+                  {/* RTL table: first column is on the right — image, then name … stock on the left */}
+                  <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }} />
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>שם</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>קטגוריה</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>מחיר</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>עלות ספק</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>מלאי</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -98,7 +121,7 @@ export function AdminItemsTable(): JSX.Element {
                     sx={{ cursor: "pointer" }}
                     onClick={() => setEditingItem(item)}
                   >
-                    <TableCell sx={{ width: 56 }}>
+                    <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }}>
                       <Avatar
                         variant="rounded"
                         src={item.imageUrl}
@@ -108,11 +131,11 @@ export function AdminItemsTable(): JSX.Element {
                         🖼️
                       </Avatar>
                     </TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.price}</TableCell>
-                    <TableCell>{item.supplierPrice}</TableCell>
-                    <TableCell>{item.stock}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{item.name}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{item.category}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{formatCurrency(item.price)}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{formatCurrency(item.supplierPrice)}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{item.stock}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
