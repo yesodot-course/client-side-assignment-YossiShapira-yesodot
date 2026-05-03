@@ -30,8 +30,8 @@ export function SupplierSpendingTable(): JSX.Element {
       <Typography variant="subtitle1" sx={{ mb: 1.5, fontWeight: 700, textAlign: "start" }}>
         הוצאות לפי ספק
       </Typography>
-      <TableContainer>
-        <Table size="small">
+      <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+        <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
           <TableHead>
             <TableRow>
               <TableCell>ספק</TableCell>

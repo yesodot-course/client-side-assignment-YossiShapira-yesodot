@@ -63,8 +63,8 @@ export function SupplierTable(): JSX.Element {
               slotProps={{ htmlInput: { dir: "rtl" } }}
             />
           </Box>
-          <TableContainer sx={{ direction: "rtl" }}>
-            <Table size="small" sx={{ direction: "rtl" }}>
+          <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+            <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>שם</TableCell>

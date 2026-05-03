@@ -78,8 +78,8 @@ export function OrdersTable(): JSX.Element {
             label="הצג גם הזמנות לא פעילות"
           />
         </Box>
-        <TableContainer>
-          <Table size="small">
+        <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
+          <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
             <TableHead>
               <TableRow>
                 <TableCell>מס׳ הזמנה</TableCell>
