@@ -1,8 +1,18 @@
-﻿import { RiAdminLine } from "react-icons/ri";
+﻿import { IoCartOutline } from "react-icons/io5";
+import { RiAdminLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
-/** עגלה: אימוג׳י | ניהול: Remix Icon RiAdminLine. aria-label לנגישות */
+const navIconButtonSx = {
+  minWidth: "auto",
+  lineHeight: 1,
+  px: 0.65,
+  py: 0.45,
+  color: "text.primary",
+  "& svg": { fontSize: "1.35rem", display: "block" },
+} as const;
+
+/** ניווט: IoCartOutline (עגלה) + RiAdminLine (ניהול). aria-label לנגישות */
 export function AppHeader(): JSX.Element {
   return (
     <AppBar position="sticky" color="inherit" elevation={1}>
@@ -24,35 +34,10 @@ export function AppHeader(): JSX.Element {
           onlineStore
         </Button>
         <Box sx={{ display: "flex", gap: 0.5, direction: "rtl", justifyContent: "flex-end", alignItems: "center" }}>
-          <Button
-            component={Link}
-            to="/cart"
-            color="inherit"
-            aria-label="עגלה"
-            sx={{
-              minWidth: "auto",
-              fontSize: "1.35rem",
-              lineHeight: 1,
-              px: 0.65,
-              py: 0.45,
-            }}
-          >
-            🛒
+          <Button component={Link} to="/cart" color="inherit" aria-label="עגלה" sx={navIconButtonSx}>
+            <IoCartOutline aria-hidden />
           </Button>
-          <Button
-            component={Link}
-            to="/admin"
-            color="inherit"
-            aria-label="לוח ניהול"
-            sx={{
-              minWidth: "auto",
-              lineHeight: 1,
-              px: 0.65,
-              py: 0.45,
-              color: "text.primary",
-              "& svg": { fontSize: "1.35rem", display: "block" },
-            }}
-          >
+          <Button component={Link} to="/admin" color="inherit" aria-label="לוח ניהול" sx={navIconButtonSx}>
             <RiAdminLine aria-hidden />
           </Button>
         </Box>
