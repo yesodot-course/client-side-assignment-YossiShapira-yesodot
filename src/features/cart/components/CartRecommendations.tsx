@@ -1,11 +1,13 @@
-﻿import { Box, Button, Paper, Typography } from "@mui/material";
+﻿import { Box, Paper, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
 import { useItems } from "../../items/hooks/useItems";
+import type { Item } from "../../items/types";
 import { selectCartItems } from "../selectors/cart.selectors";
 import { addItem } from "../store/cart.slice";
 import { buildRecommendations } from "../utils/recommendations";
 import { showToast } from "../../../shared/ui/feedback/toast";
+import { CartRecommendedProductCard } from "./CartRecommendedProductCard";
 
 export function CartRecommendations(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -13,10 +15,25 @@ export function CartRecommendations(): JSX.Element {
   const itemsQuery = useItems();
   const recommendations = buildRecommendations(cartItems, itemsQuery.data ?? []);
 
+  function handleAddToCart(item: Item, quantity: number): void {
+    dispatch(
+      addItem({
+        id: item._id,
+        name: item.name,
+        price: item.price,
+        quantity,
+        stock: item.stock,
+        category: item.category,
+        imageUrl: item.imageUrl,
+      })
+    );
+    showToast(`"${item.name}" נוסף לעגלה`);
+  }
+
   return (
     <Paper sx={{ p: 2 }}>
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-        <Typography variant="h6">המלצות</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Typography variant="h6">מוצרים מומלצים</Typography>
         {cartItems.length === 0 ? (
           <Typography color="text.secondary">הוסף מוצרים לעגלה כדי לקבל המלצות.</Typography>
         ) : itemsQuery.isLoading ? (
@@ -24,37 +41,18 @@ export function CartRecommendations(): JSX.Element {
         ) : recommendations.length === 0 ? (
           <Typography color="text.secondary">אין כרגע מוצרים מומלצים זמינים.</Typography>
         ) : (
-          <Box sx={{ display: "grid", gap: 1, gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" } }}>
+          <Box
+            sx={{
+              display: "grid",
+              gap: 2,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm: "repeat(2, minmax(0, 1fr))",
+              },
+            }}
+          >
             {recommendations.map((item) => (
-              <Paper key={item._id} variant="outlined" sx={{ p: 1.25 }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.75 }}>
-                  <Typography variant="subtitle2">{item.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    קטגוריה: {item.category}
-                  </Typography>
-                  <Typography variant="body2">${item.price.toFixed(2)}</Typography>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    onClick={() => {
-                      dispatch(
-                        addItem({
-                          id: item._id,
-                          name: item.name,
-                          price: item.price,
-                          quantity: 1,
-                          stock: item.stock,
-                          category: item.category,
-                          imageUrl: item.imageUrl,
-                        })
-                      );
-                      showToast(`"${item.name}" נוסף לעגלה`);
-                    }}
-                  >
-                    הוסף לעגלה
-                  </Button>
-                </Box>
-              </Paper>
+              <CartRecommendedProductCard key={item._id} item={item} onAddToCart={handleAddToCart} />
             ))}
           </Box>
         )}
