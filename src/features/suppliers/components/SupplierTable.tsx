@@ -45,22 +45,41 @@ export function SupplierTable(): JSX.Element {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <Typography variant="h5" sx={{ fontWeight: 700, textAlign: "start" }}>
+          ספקים
+        </Typography>
         <Paper variant="outlined" sx={{ p: 2.5 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, flexWrap: "wrap" }}>
-            <Typography variant="h5" sx={{ flex: 1, minWidth: 0, fontWeight: 700, textAlign: "start" }}>
-              ספקים
-            </Typography>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
+            <Button variant="contained" endIcon={<AddIcon fontSize="small" />} onClick={() => setIsCreateOpen(true)}>
               הוסף ספק
             </Button>
           </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
+              id="admin-suppliers-search"
               label="חיפוש ספקים (שם/פרטי קשר)"
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
               fullWidth
-              slotProps={{ htmlInput: { dir: "rtl" } }}
+              variant="outlined"
+              dir="rtl"
+              sx={{
+                direction: "rtl",
+                "& .MuiOutlinedInput-input": { textAlign: "right" },
+                "& .MuiOutlinedInput-notchedOutline": { textAlign: "right" },
+                "& label.MuiInputLabel-root": {
+                  left: "auto",
+                  right: 14,
+                  transformOrigin: "top right",
+                },
+                "& label.MuiInputLabel-root:not(.MuiInputLabel-shrink)": {
+                  transform: "translate(0, 16px) scale(1)",
+                },
+                "& label.MuiInputLabel-root.MuiInputLabel-shrink": {
+                  transform: "translate(0, -9px) scale(0.75)",
+                },
+              }}
+              slotProps={{ htmlInput: { dir: "rtl", style: { textAlign: "right" } } }}
             />
           </Box>
           <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
