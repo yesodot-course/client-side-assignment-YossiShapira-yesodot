@@ -6,10 +6,10 @@ import { AppBar, Box, Button, Toolbar } from "@mui/material";
 const navIconButtonSx = {
   minWidth: "auto",
   lineHeight: 1,
-  px: 0.65,
-  py: 0.45,
+  px: 0.75,
+  py: 0.55,
   color: "text.primary",
-  "& svg": { fontSize: "1.35rem", display: "block" },
+  "& svg": { fontSize: "1.55rem", display: "block" },
 } as const;
 
 /** ניווט: IoCartOutline (עגלה) + RiAdminLine (ניהול). aria-label לנגישות */
