@@ -87,9 +87,9 @@ export function AdminItemsTable(): JSX.Element {
                   <TableCell>מלאי</TableCell>
                   <TableCell>עלות ספק</TableCell>
                   <TableCell>מחיר</TableCell>
-                  <TableCell>קטגוריה</TableCell>
-                  <TableCell>שם</TableCell>
-                  <TableCell />
+                  <TableCell sx={{ textAlign: "end" }}>קטגוריה</TableCell>
+                  <TableCell sx={{ textAlign: "end" }}>שם</TableCell>
+                  <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }} />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -103,9 +103,9 @@ export function AdminItemsTable(): JSX.Element {
                     <TableCell>{item.stock}</TableCell>
                     <TableCell>{formatCurrency(item.supplierPrice)}</TableCell>
                     <TableCell>{formatCurrency(item.price)}</TableCell>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell sx={{ width: 56 }}>
+                    <TableCell sx={{ textAlign: "end" }}>{item.category}</TableCell>
+                    <TableCell sx={{ textAlign: "end" }}>{item.name}</TableCell>
+                    <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }}>
                       <Avatar
                         variant="rounded"
                         src={item.imageUrl}
