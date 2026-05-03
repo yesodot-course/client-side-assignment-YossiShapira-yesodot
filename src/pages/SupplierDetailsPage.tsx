@@ -90,7 +90,7 @@ export function SupplierDetailsPage(): JSX.Element {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
+    <Box dir="rtl" sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start", maxWidth: 720, mx: "auto", width: "100%" }}>
       <Button
         variant="text"
         endIcon={<ArrowForwardIosIcon fontSize="small" />}
@@ -99,13 +99,29 @@ export function SupplierDetailsPage(): JSX.Element {
       >
         חזרה לספקים
       </Button>
-      <Typography variant="h4">פרטי ספק</Typography>
+      <Typography variant="h4" sx={{ alignSelf: "stretch", textAlign: "start", fontWeight: 700 }}>
+        פרטי ספק
+      </Typography>
       <Paper
         variant="outlined"
+        dir="rtl"
         sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}
       >
         <SupplierEditorCore form={form} setForm={setForm} />
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", justifyContent: "flex-start", direction: "rtl" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1.5,
+            flexWrap: "wrap",
+            justifyContent: "flex-start",
+            direction: "rtl",
+            width: "100%",
+            pt: 2,
+            mt: 0.5,
+            borderTop: 1,
+            borderColor: "divider",
+          }}
+        >
           <Button variant="contained" onClick={handleSave} disabled={updateMutation.isPending}>
             שמור שינויים
           </Button>

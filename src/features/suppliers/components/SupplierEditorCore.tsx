@@ -9,8 +9,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Menu,
-  MenuItem,
   Paper,
   TextField,
   Typography,
@@ -18,7 +16,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { useItems } from "../../items/hooks/useItems";
 import type { SupplierInput } from "../types";
@@ -63,8 +60,6 @@ interface SupplierEditorCoreProps {
 export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): JSX.Element {
   const itemsQuery = useItems();
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
-  const [actionAnchorEl, setActionAnchorEl] = useState<HTMLElement | null>(null);
-  const [actionIndex, setActionIndex] = useState<number | null>(null);
   const [isCatalogDialogOpen, setIsCatalogDialogOpen] = useState(false);
   const [editingCatalogIndex, setEditingCatalogIndex] = useState<number | null>(null);
   const [catalogDraft, setCatalogDraft] = useState<CatalogItemDraft>(emptyCatalogDraft);
@@ -96,6 +91,13 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
       imageUrl: item.imageUrl?.trim() ?? "",
     });
     setIsCatalogDialogOpen(true);
+  };
+
+  const removeCatalogItem = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      items: prev.items.filter((_, i) => i !== index),
+    }));
   };
 
   const saveCatalogItem = () => {
@@ -142,7 +144,7 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
   const textFieldRtl = { htmlInput: { dir: "rtl" as const } };
 
   return (
-    <Box sx={{ direction: "rtl", textAlign: "start" }}>
+    <Box dir="rtl" sx={{ direction: "rtl", textAlign: "start" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
           label="שם"
@@ -156,119 +158,100 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
           onChange={(event) => setForm({ ...form, contactInfo: event.target.value })}
           slotProps={textFieldRtl}
         />
+        <Typography variant="subtitle2" color="text.secondary" sx={{ alignSelf: "stretch" }}>
+          פריטי קטלוג
+        </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           {form.items.map((catalogItem, index) => (
             <Paper
               key={index}
+              dir="rtl"
               variant="outlined"
               sx={{
                 p: 1.25,
+                width: "100%",
+                boxSizing: "border-box",
                 display: "flex",
+                flexDirection: "row",
                 alignItems: "center",
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+                gap: 1.5,
                 direction: "rtl",
                 textAlign: "start",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", minWidth: 0, gap: 0.5, flexShrink: 0 }}>
-                <Typography
-                  variant="subtitle2"
-                  sx={{
-                    textAlign: "start",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    maxWidth: "100%",
-                  }}
-                >
-                  {catalogItem.itemName || "פריט ללא שם"}
-                </Typography>
+              <Avatar
+                variant="rounded"
+                src={
+                  catalogItem.imageUrl && catalogItem.imageUrl.trim().length > 0
+                    ? catalogItem.imageUrl.trim()
+                    : getFallbackCatalogImage(catalogItem.itemName)
+                }
+                alt={catalogItem.itemName || "תמונת פריט"}
+                sx={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 1,
+                  border: "1px solid #ddd",
+                  bgcolor: "grey.100",
+                  color: "text.secondary",
+                  flexShrink: 0,
+                }}
+              >
+                🖼️
+              </Avatar>
+              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap", flexShrink: 0 }}>
+                עלות: {formatCurrency(catalogItem.price)}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  minWidth: 0,
+                  maxWidth: { xs: "12rem", sm: "20rem" },
+                  textAlign: "start",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {catalogItem.itemName || "פריט ללא שם"}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexShrink: 0 }}>
                 <IconButton
-                  onClick={(event) => {
-                    setActionAnchorEl(event.currentTarget);
-                    setActionIndex(index);
-                  }}
-                  aria-label="פעולות פריט קטלוג"
-                  edge="start"
                   size="small"
-                  sx={{ p: 0.5 }}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              </Box>
-              <Box sx={{ flex: 1, minWidth: 8 }} />
-              <Box sx={{ display: "flex", alignItems: "center", flexShrink: 0, gap: 1.5 }}>
-                <Typography variant="body2" color="text.secondary" sx={{ textAlign: "start", whiteSpace: "nowrap" }}>
-                  עלות: {formatCurrency(catalogItem.price)}
-                </Typography>
-                <Avatar
-                  variant="rounded"
-                  src={
-                    catalogItem.imageUrl && catalogItem.imageUrl.trim().length > 0
-                      ? catalogItem.imageUrl.trim()
-                      : getFallbackCatalogImage(catalogItem.itemName)
-                  }
-                  alt={catalogItem.itemName || "תמונת פריט"}
-                  sx={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 1,
-                    border: "1px solid #ddd",
-                    bgcolor: "grey.100",
-                    color: "text.secondary",
-                    flexShrink: 0,
+                  aria-label="ערוך פריט קטלוג"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openEditCatalogDialog(index);
                   }}
                 >
-                  🖼️
-                </Avatar>
+                  <EditIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  color="error"
+                  aria-label="הסר פריט קטלוג"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    removeCatalogItem(index);
+                  }}
+                >
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
               </Box>
             </Paper>
           ))}
-          <Button variant="outlined" startIcon={<AddIcon />} onClick={openCreateCatalogDialog} sx={{ alignSelf: "stretch" }}>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon />}
+            onClick={openCreateCatalogDialog}
+            sx={{ alignSelf: "stretch", justifyContent: "center", direction: "rtl" }}
+          >
             הוסף פריט קטלוג
           </Button>
         </Box>
       </Box>
-
-      <Menu
-        anchorEl={actionAnchorEl}
-        open={Boolean(actionAnchorEl) && actionIndex !== null}
-        onClose={() => {
-          setActionAnchorEl(null);
-          setActionIndex(null);
-        }}
-        slotProps={{ paper: { sx: { direction: "rtl", textAlign: "start" } } }}
-      >
-        <MenuItem
-          onClick={() => {
-            if (actionIndex === null) {
-              return;
-            }
-            openEditCatalogDialog(actionIndex);
-            setActionAnchorEl(null);
-            setActionIndex(null);
-          }}
-        >
-          <EditIcon fontSize="small" sx={{ marginInlineEnd: 0.5 }} />
-          ערוך
-        </MenuItem>
-        <MenuItem
-          sx={{ color: "error.main" }}
-          onClick={() => {
-            if (actionIndex === null) {
-              return;
-            }
-            setForm((prev) => ({
-              ...prev,
-              items: prev.items.filter((_, index) => index !== actionIndex),
-            }));
-            setActionAnchorEl(null);
-            setActionIndex(null);
-          }}
-        >
-          <DeleteIcon fontSize="small" sx={{ marginInlineEnd: 0.5 }} />
-          הסר
-        </MenuItem>
-      </Menu>
 
       <Dialog
         open={isCatalogDialogOpen}
