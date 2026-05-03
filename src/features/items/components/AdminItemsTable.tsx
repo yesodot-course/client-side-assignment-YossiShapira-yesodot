@@ -84,11 +84,11 @@ export function AdminItemsTable(): JSX.Element {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>מלאי</TableCell>
-                  <TableCell>עלות ספק</TableCell>
-                  <TableCell>מחיר</TableCell>
-                  <TableCell sx={{ textAlign: "end" }}>קטגוריה</TableCell>
-                  <TableCell sx={{ textAlign: "end" }}>שם</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>מלאי</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>עלות ספק</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>מחיר</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>קטגוריה</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>שם</TableCell>
                   <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }} />
                 </TableRow>
               </TableHead>
@@ -100,11 +100,11 @@ export function AdminItemsTable(): JSX.Element {
                     sx={{ cursor: "pointer" }}
                     onClick={() => setEditingItem(item)}
                   >
-                    <TableCell>{item.stock}</TableCell>
-                    <TableCell>{formatCurrency(item.supplierPrice)}</TableCell>
-                    <TableCell>{formatCurrency(item.price)}</TableCell>
-                    <TableCell sx={{ textAlign: "end" }}>{item.category}</TableCell>
-                    <TableCell sx={{ textAlign: "end" }}>{item.name}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{item.stock}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{formatCurrency(item.supplierPrice)}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{formatCurrency(item.price)}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{item.category}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{item.name}</TableCell>
                     <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }}>
                       <Avatar
                         variant="rounded"
