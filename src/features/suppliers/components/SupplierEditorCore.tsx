@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   TextField,
   Typography,
@@ -16,6 +18,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import { useItems } from "../../items/hooks/useItems";
 import type { SupplierInput } from "../types";
@@ -60,6 +63,8 @@ interface SupplierEditorCoreProps {
 export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): JSX.Element {
   const itemsQuery = useItems();
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const [actionAnchorEl, setActionAnchorEl] = useState<HTMLElement | null>(null);
+  const [actionIndex, setActionIndex] = useState<number | null>(null);
   const [isCatalogDialogOpen, setIsCatalogDialogOpen] = useState(false);
   const [editingCatalogIndex, setEditingCatalogIndex] = useState<number | null>(null);
   const [catalogDraft, setCatalogDraft] = useState<CatalogItemDraft>(emptyCatalogDraft);
@@ -158,29 +163,55 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
           onChange={(event) => setForm({ ...form, contactInfo: event.target.value })}
           slotProps={textFieldRtl}
         />
-        <Typography variant="subtitle2" color="text.secondary" sx={{ alignSelf: "stretch" }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ alignSelf: "flex-start" }}>
           פריטי קטלוג
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
           {form.items.map((catalogItem, index) => (
             <Paper
               key={index}
-              dir="rtl"
               variant="outlined"
-              sx={{
-                p: 1.25,
-                width: "100%",
-                boxSizing: "border-box",
+              sx={{ p: 1.25, width: "100%", boxSizing: "border-box" }}
+              style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "flex-start",
-                flexWrap: "wrap",
-                gap: 1.5,
-                direction: "rtl",
-                textAlign: "start",
+                gap: 12,
+                direction: "ltr",
               }}
             >
+              <Box style={{ flexShrink: 0 }}>
+                <IconButton
+                  size="small"
+                  aria-label="פעולות פריט קטלוג"
+                  onClick={(event) => {
+                    setActionAnchorEl(event.currentTarget);
+                    setActionIndex(index);
+                  }}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </Box>
+              {/* Spacer eats space so name/price/image stay clustered on the right (LTR row: ⋮ … עלות | שם | תמונה) */}
+              <Box style={{ flex: "1 1 0%", minWidth: 0 }} aria-hidden />
+              <Typography variant="body2" color="text.secondary" dir="rtl" sx={{ whiteSpace: "nowrap", flexShrink: 0 }}>
+                עלות: {formatCurrency(catalogItem.price)}
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                dir="rtl"
+                sx={{
+                  flexShrink: 1,
+                  minWidth: 0,
+                  maxWidth: { xs: "10rem", sm: "16rem" },
+                  textAlign: "right",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {catalogItem.itemName || "פריט ללא שם"}
+              </Typography>
               <Avatar
                 variant="rounded"
                 src={
@@ -201,45 +232,6 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
               >
                 🖼️
               </Avatar>
-              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap", flexShrink: 0 }}>
-                עלות: {formatCurrency(catalogItem.price)}
-              </Typography>
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  minWidth: 0,
-                  maxWidth: { xs: "12rem", sm: "20rem" },
-                  textAlign: "start",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {catalogItem.itemName || "פריט ללא שם"}
-              </Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexShrink: 0 }}>
-                <IconButton
-                  size="small"
-                  aria-label="ערוך פריט קטלוג"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    openEditCatalogDialog(index);
-                  }}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  color="error"
-                  aria-label="הסר פריט קטלוג"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeCatalogItem(index);
-                  }}
-                >
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </Box>
             </Paper>
           ))}
           <Button
@@ -252,6 +244,44 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
           </Button>
         </Box>
       </Box>
+
+      <Menu
+        anchorEl={actionAnchorEl}
+        open={Boolean(actionAnchorEl) && actionIndex !== null}
+        onClose={() => {
+          setActionAnchorEl(null);
+          setActionIndex(null);
+        }}
+        slotProps={{ paper: { sx: { direction: "rtl", textAlign: "start" } } }}
+      >
+        <MenuItem
+          onClick={() => {
+            if (actionIndex === null) {
+              return;
+            }
+            openEditCatalogDialog(actionIndex);
+            setActionAnchorEl(null);
+            setActionIndex(null);
+          }}
+        >
+          <EditIcon fontSize="small" sx={{ marginInlineEnd: 0.5 }} />
+          ערוך
+        </MenuItem>
+        <MenuItem
+          sx={{ color: "error.main" }}
+          onClick={() => {
+            if (actionIndex === null) {
+              return;
+            }
+            removeCatalogItem(actionIndex);
+            setActionAnchorEl(null);
+            setActionIndex(null);
+          }}
+        >
+          <DeleteIcon fontSize="small" sx={{ marginInlineEnd: 0.5 }} />
+          הסר
+        </MenuItem>
+      </Menu>
 
       <Dialog
         open={isCatalogDialogOpen}

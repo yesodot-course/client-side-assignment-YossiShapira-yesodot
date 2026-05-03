@@ -90,18 +90,36 @@ export function SupplierDetailsPage(): JSX.Element {
   };
 
   return (
-    <Box dir="rtl" sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start", maxWidth: 720, mx: "auto", width: "100%" }}>
-      <Button
-        variant="text"
-        endIcon={<ArrowForwardIosIcon fontSize="small" />}
-        sx={{ alignSelf: "flex-start" }}
-        onClick={() => navigate("/admin?tab=suppliers")}
+    <Box dir="rtl" sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 2, textAlign: "start" }}>
+      {/* direction: ltr on this wrapper so flex-end = physical right (stylis rtl flips rtl flex otherwise) */}
+      <Box
+        style={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "flex-end",
+          direction: "ltr",
+        }}
       >
-        חזרה לספקים
-      </Button>
-      <Typography variant="h4" sx={{ alignSelf: "stretch", textAlign: "start", fontWeight: 700 }}>
-        פרטי ספק
-      </Typography>
+        <Box style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+          <Button
+            variant="text"
+            startIcon={<ArrowForwardIosIcon fontSize="small" />}
+            sx={{
+              textAlign: "right",
+              px: 0,
+              minWidth: 0,
+              justifyContent: "flex-end",
+              direction: "rtl",
+            }}
+            onClick={() => navigate("/admin?tab=suppliers")}
+          >
+            חזרה לספקים
+          </Button>
+          <Typography variant="h4" sx={{ fontWeight: 700, textAlign: "right" }}>
+            פרטי ספק
+          </Typography>
+        </Box>
+      </Box>
       <Paper
         variant="outlined"
         dir="rtl"
@@ -110,23 +128,26 @@ export function SupplierDetailsPage(): JSX.Element {
         <SupplierEditorCore form={form} setForm={setForm} />
         <Box
           sx={{
-            display: "flex",
-            gap: 1.5,
-            flexWrap: "wrap",
-            justifyContent: "flex-start",
-            direction: "rtl",
-            width: "100%",
             pt: 2,
             mt: 0.5,
             borderTop: 1,
             borderColor: "divider",
+            width: "100%",
+          }}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 12,
+            justifyContent: "flex-end",
+            direction: "ltr",
           }}
         >
-          <Button variant="contained" onClick={handleSave} disabled={updateMutation.isPending}>
-            שמור שינויים
-          </Button>
           <Button variant="outlined" color="error" onClick={handleDelete} disabled={deleteMutation.isPending}>
             מחק ספק
+          </Button>
+          <Button variant="contained" onClick={handleSave} disabled={updateMutation.isPending}>
+            שמור שינויים
           </Button>
         </Box>
       </Paper>
