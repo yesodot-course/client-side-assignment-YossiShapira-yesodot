@@ -20,6 +20,7 @@ import { useSearchItems } from "../hooks/useSearchItems";
 import { useCreateItem } from "../hooks/useCreateItem";
 import { useDeleteItem } from "../hooks/useDeleteItem";
 import { useUpdateItem } from "../hooks/useUpdateItem";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { ItemFormModal } from "./ItemFormModal";
 import type { Item } from "../types";
 import type { ItemInput } from "../api/items.api";
@@ -61,13 +62,15 @@ export function AdminItemsTable(): JSX.Element {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
-          מוצרים
-        </Typography>
         <Paper variant="outlined" sx={{ p: 2.5 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)} sx={{ mb: 2 }}>
-            הוסף מוצר
-          </Button>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, flexWrap: "wrap" }}>
+            <Typography variant="h5" sx={{ flex: 1, minWidth: 0, fontWeight: 700, textAlign: "start" }}>
+              מוצרים
+            </Typography>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)}>
+              הוסף מוצר
+            </Button>
+          </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
               label="חיפוש מוצרים (שם/קטגוריה)"
@@ -75,19 +78,18 @@ export function AdminItemsTable(): JSX.Element {
               onChange={(event) => setSearchTerm(event.target.value)}
               fullWidth
               slotProps={{ htmlInput: { dir: "rtl" } }}
-              sx={{ "& .MuiInputBase-input": { textAlign: "right" } }}
             />
           </Box>
           <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell />
-                  <TableCell>שם</TableCell>
-                  <TableCell>קטגוריה</TableCell>
-                  <TableCell>מחיר</TableCell>
-                  <TableCell>עלות ספק</TableCell>
                   <TableCell>מלאי</TableCell>
+                  <TableCell>עלות ספק</TableCell>
+                  <TableCell>מחיר</TableCell>
+                  <TableCell>קטגוריה</TableCell>
+                  <TableCell>שם</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -98,6 +100,11 @@ export function AdminItemsTable(): JSX.Element {
                     sx={{ cursor: "pointer" }}
                     onClick={() => setEditingItem(item)}
                   >
+                    <TableCell>{item.stock}</TableCell>
+                    <TableCell>{formatCurrency(item.supplierPrice)}</TableCell>
+                    <TableCell>{formatCurrency(item.price)}</TableCell>
+                    <TableCell>{item.category}</TableCell>
+                    <TableCell>{item.name}</TableCell>
                     <TableCell sx={{ width: 56 }}>
                       <Avatar
                         variant="rounded"
@@ -108,11 +115,6 @@ export function AdminItemsTable(): JSX.Element {
                         🖼️
                       </Avatar>
                     </TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.price}</TableCell>
-                    <TableCell>{item.supplierPrice}</TableCell>
-                    <TableCell>{item.stock}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

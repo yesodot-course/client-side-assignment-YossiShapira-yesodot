@@ -155,11 +155,11 @@ export function OrderDetailsPage(): JSX.Element {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "right" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
       <Button
         variant="text"
         endIcon={<ArrowForwardIosIcon fontSize="small" />}
-        sx={{ alignSelf: "flex-end" }}
+        sx={{ alignSelf: "flex-start" }}
         onClick={() => navigate("/admin?tab=orders")}
       >
         חזרה להזמנות
@@ -177,17 +177,7 @@ export function OrderDetailsPage(): JSX.Element {
           <Alert severity="info">אין כרגע פריטים בהזמנה. אפשר להוסיף פריט חדש.</Alert>
         ) : null}
         {editableItems.map((entry, index) => (
-          <Box key={`${entry.item}-${index}`} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-            <Box sx={{ width: 42, height: 42, flexShrink: 0 }}>
-              {entry.item && itemsMap.get(entry.item)?.imageUrl ? (
-                <Avatar
-                  variant="rounded"
-                  src={itemsMap.get(entry.item)?.imageUrl ?? undefined}
-                  alt={itemsMap.get(entry.item)?.name ?? "תמונת מוצר"}
-                  sx={{ width: 42, height: 42, bgcolor: "grey.100", color: "text.secondary" }}
-                />
-              ) : null}
-            </Box>
+          <Box key={`${entry.item}-${index}`} sx={{ display: "flex", gap: 1, alignItems: "center", flexWrap: "wrap" }}>
             <Autocomplete
               options={availableItems}
               getOptionLabel={(option) => option.name}
@@ -199,6 +189,7 @@ export function OrderDetailsPage(): JSX.Element {
               renderInput={(params) => <TextField {...params} label="פריט" />}
               renderOption={(props, option) => (
                 <Box component="li" {...props} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <span>{option.name}</span>
                   {option.imageUrl ? (
                     <Avatar
                       variant="rounded"
@@ -207,10 +198,9 @@ export function OrderDetailsPage(): JSX.Element {
                       sx={{ width: 32, height: 32, bgcolor: "grey.100", color: "text.secondary" }}
                     />
                   ) : null}
-                  <span>{option.name}</span>
                 </Box>
               )}
-              sx={{ flex: 1 }}
+              sx={{ flex: 1, minWidth: 200 }}
               disabled={isLocked}
             />
             <TextField
@@ -233,6 +223,16 @@ export function OrderDetailsPage(): JSX.Element {
             >
               <DeleteIcon />
             </IconButton>
+            <Box sx={{ width: 42, height: 42, flexShrink: 0 }}>
+              {entry.item && itemsMap.get(entry.item)?.imageUrl ? (
+                <Avatar
+                  variant="rounded"
+                  src={itemsMap.get(entry.item)?.imageUrl ?? undefined}
+                  alt={itemsMap.get(entry.item)?.name ?? "תמונת מוצר"}
+                  sx={{ width: 42, height: 42, bgcolor: "grey.100", color: "text.secondary" }}
+                />
+              ) : null}
+            </Box>
           </Box>
         ))}
 
@@ -240,7 +240,7 @@ export function OrderDetailsPage(): JSX.Element {
           הוסף פריט
         </Button>
 
-        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
+        <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-start" }}>
           <Button variant="contained" onClick={() => submitUpdate("Pending")} disabled={isLocked || updateOrderMutation.isPending}>
             שמור שינויים
           </Button>

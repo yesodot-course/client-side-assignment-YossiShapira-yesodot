@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Typography } from "@mui/material";
 
 import type { Item } from "../types";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { AddToCartPanel } from "../../cart/components/AddToCartPanel";
 
 interface ItemCardProps {
@@ -38,7 +39,7 @@ export function ItemCard({ item, onAddToCart }: ItemCardProps): JSX.Element {
           <Chip label={item.category} size="small" />
         </Box>
         <Typography color="text.secondary">ספק: {supplierName}</Typography>
-        <Typography sx={{ mt: 1 }}>${item.price.toFixed(2)}</Typography>
+        <Typography sx={{ mt: 1 }}>{formatCurrency(item.price)}</Typography>
         <Typography color={item.stock > 0 ? "text.secondary" : "error"}>מלאי: {item.stock}</Typography>
       </CardContent>
       <CardActions sx={{ px: 2, pb: 2, display: "flex", justifyContent: "space-between", alignItems: "center", mt: "auto" }}>

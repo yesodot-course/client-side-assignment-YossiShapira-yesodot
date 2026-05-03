@@ -80,8 +80,8 @@ export function HomePage(): JSX.Element {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <Box sx={{ display: "flex", flexDirection: "row-reverse", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
-        <Typography variant="h4" sx={{ textAlign: "right" }}>
+      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: 2 }}>
+        <Typography variant="h4" sx={{ textAlign: "start", flex: 1 }}>
           מוצרי החנות
         </Typography>
       </Box>

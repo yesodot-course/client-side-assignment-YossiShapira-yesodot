@@ -17,33 +17,33 @@ export function AdminPage(): JSX.Element {
   const [activeTab, setActiveTab] = useState(initialTab);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "right" }}>
-      <Typography variant="h4" sx={{ alignSelf: "flex-end", textAlign: "right" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
+      <Typography variant="h4" sx={{ alignSelf: "flex-start", textAlign: "start" }}>
         לוח ניהול
       </Typography>
       <Box
         sx={{
           display: "flex",
           gap: 2,
-          flexDirection: { xs: "column", md: "row-reverse" },
+          flexDirection: { xs: "column", md: "row" },
         }}
       >
         <Box sx={{ flex: 1 }}>
-          <Paper sx={{ p: 2, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-            <Typography variant="h6" sx={{ textAlign: "right" }}>
+          <Paper sx={{ p: 2, textAlign: "start", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+            <Typography variant="h6" sx={{ textAlign: "start" }}>
               סה״כ מוצרים
             </Typography>
-            <Typography variant="h4" sx={{ textAlign: "right" }}>
+            <Typography variant="h4" sx={{ textAlign: "start" }}>
               {products.length}
             </Typography>
           </Paper>
         </Box>
         <Box sx={{ flex: 1 }}>
-          <Paper sx={{ p: 2, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-            <Typography variant="h6" sx={{ textAlign: "right" }}>
+          <Paper sx={{ p: 2, textAlign: "start", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+            <Typography variant="h6" sx={{ textAlign: "start" }}>
               מוצרים שעומדים להיגמר (מלאי קטן מ־5)
             </Typography>
-            <Typography variant="h4" sx={{ textAlign: "right" }}>
+            <Typography variant="h4" sx={{ textAlign: "start" }}>
               {lowStockItems.length}
             </Typography>
           </Paper>
@@ -63,7 +63,7 @@ export function AdminPage(): JSX.Element {
           dir="rtl"
           sx={{
             "& .MuiTabs-flexContainer": {
-              justifyContent: "flex-end",
+              justifyContent: "flex-start",
             },
           }}
         >

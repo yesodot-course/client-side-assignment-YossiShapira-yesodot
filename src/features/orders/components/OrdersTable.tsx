@@ -20,6 +20,7 @@ import { useOrders } from "../hooks/useOrders";
 import { useSearchOrders } from "../hooks/useSearchOrders";
 import { useUpdateOrder } from "../hooks/useUpdateOrder";
 import type { Order } from "../types";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { ApiError } from "../../../shared/api/apiError";
 
@@ -59,7 +60,7 @@ export function OrdersTable(): JSX.Element {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-      <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-start", textAlign: "start" }}>
         הזמנות
       </Typography>
       <Paper variant="outlined" sx={{ p: 2.5 }}>
@@ -71,7 +72,7 @@ export function OrdersTable(): JSX.Element {
             fullWidth
           />
         </Box>
-        <Box sx={{ mb: 1, display: "flex", justifyContent: "flex-end" }}>
+        <Box sx={{ mb: 1, display: "flex", justifyContent: "flex-start" }}>
           <FormControlLabel
             control={<Checkbox checked={showInactive} onChange={(event) => setShowInactive(event.target.checked)} size="small" />}
             label="הצג גם הזמנות לא פעילות"
@@ -100,7 +101,7 @@ export function OrdersTable(): JSX.Element {
                   <TableCell>{order._id}</TableCell>
                   <TableCell>{order.customerId}</TableCell>
                   <TableCell>{getTotalItems(order)}</TableCell>
-                  <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
+                  <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
                   <TableCell>
                     {(order.status ?? "Pending") === "Pending" ? (
                       <Chip size="small" color="success" label="פעיל" />
@@ -109,7 +110,7 @@ export function OrdersTable(): JSX.Element {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
+                    <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-start" }}>
                       <Button
                         size="small"
                         variant="outlined"

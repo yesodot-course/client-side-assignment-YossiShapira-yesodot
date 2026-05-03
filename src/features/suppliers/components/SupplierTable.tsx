@@ -60,13 +60,15 @@ export function SupplierTable(): JSX.Element {
   return (
     <>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-        <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
-          ספקים
-        </Typography>
         <Paper variant="outlined" sx={{ p: 2.5 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)} sx={{ mb: 2 }}>
-            הוסף ספק
-          </Button>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2, flexWrap: "wrap" }}>
+            <Typography variant="h5" sx={{ flex: 1, minWidth: 0, fontWeight: 700, textAlign: "start" }}>
+              ספקים
+            </Typography>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={() => setIsCreateOpen(true)}>
+              הוסף ספק
+            </Button>
+          </Box>
           <Box sx={{ mb: 2 }}>
             <TextField
               label="חיפוש ספקים (שם/פרטי קשר)"
@@ -74,22 +76,24 @@ export function SupplierTable(): JSX.Element {
               onChange={(event) => setSearchTerm(event.target.value)}
               fullWidth
               slotProps={{ htmlInput: { dir: "rtl" } }}
-              sx={{ "& .MuiInputBase-input": { textAlign: "right" } }}
             />
           </Box>
           <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell />
                   <TableCell>שם</TableCell>
                   <TableCell>פרטי קשר</TableCell>
                   <TableCell>פריטי קטלוג</TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows.map((supplier) => (
                   <TableRow key={supplier._id}>
+                    <TableCell>{supplier.name}</TableCell>
+                    <TableCell>{supplier.contactInfo}</TableCell>
+                    <TableCell>{supplier.items.length}</TableCell>
                     <TableCell sx={{ width: 56 }}>
                       <IconButton
                         size="small"
@@ -102,9 +106,6 @@ export function SupplierTable(): JSX.Element {
                         ⋮
                       </IconButton>
                     </TableCell>
-                    <TableCell>{supplier.name}</TableCell>
-                    <TableCell>{supplier.contactInfo}</TableCell>
-                    <TableCell>{supplier.items.length}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

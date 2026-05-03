@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import type { SupplierInput } from "../types";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { uploadSupplierImage } from "../api/supplier-image-upload.api.ts";
 import { useItems } from "../../items/hooks/useItems";
@@ -198,14 +199,14 @@ export function SupplierFormModal({
                     🖼️
                   </Avatar>
                   <Typography variant="body2" color="text.secondary">
-                    עלות: {catalogItem.price}
+                    עלות: {formatCurrency(catalogItem.price)}
                   </Typography>
                 </Box>
                 <Box sx={{ flex: 1 }} />
                 <Box sx={{ display: "flex", alignItems: "center", minWidth: 0, ml: "auto" }}>
                   <Typography
                     variant="subtitle2"
-                    sx={{ textAlign: "right", pr: 0.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", direction: "rtl" }}
+                    sx={{ textAlign: "start", pr: 0.5, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", direction: "rtl" }}
                   >
                     {catalogItem.itemName || "פריט ללא שם"}
                   </Typography>

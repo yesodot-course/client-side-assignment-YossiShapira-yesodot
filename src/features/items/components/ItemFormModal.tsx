@@ -11,6 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import type { ItemInput } from "../api/items.api";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { useSuppliers } from "../../suppliers/hooks/useSuppliers";
 import { useItems } from "../hooks/useItems";
@@ -115,7 +116,7 @@ export function ItemFormModal({ open, onClose, initialValue, submitLabel, onSubm
     }
     const minAllowedPrice = supplierPrice * 1.3;
     if (price < minAllowedPrice) {
-      showToast(`מחיר מכירה חייב להיות לפחות ${minAllowedPrice.toFixed(2)} (30% מעל עלות ספק).`);
+      showToast(`מחיר מכירה חייב להיות לפחות ${formatCurrency(minAllowedPrice)} (30% מעל עלות ספק).`);
       return false;
     }
     if (form.imageUrl && form.imageUrl.trim().length > 0) {
@@ -218,7 +219,10 @@ export function ItemFormModal({ open, onClose, initialValue, submitLabel, onSubm
                   </Avatar>
                   <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <span>{optionName}</span>
-                    <span style={{ color: "#666", fontSize: 12 }}>עלות ספק: {option?.price ?? "-"}</span>
+                    <span style={{ color: "#666", fontSize: 12 }}>
+                      עלות ספק:{" "}
+                      {option?.price != null && Number.isFinite(option.price) ? formatCurrency(option.price) : "-"}
+                    </span>
                   </Box>
                 </Box>
               );
@@ -237,7 +241,7 @@ export function ItemFormModal({ open, onClose, initialValue, submitLabel, onSubm
             slotProps={{
               htmlInput: {
                 min: form.supplierPrice.trim().length > 0 ? Number((Number(form.supplierPrice) * 1.3).toFixed(2)) : 0,
-                style: { direction: "rtl", textAlign: "right" },
+                style: { direction: "rtl", textAlign: "start" },
               },
             }}
           />
@@ -247,14 +251,14 @@ export function ItemFormModal({ open, onClose, initialValue, submitLabel, onSubm
             value={form.supplierPrice}
             onChange={(event) => updateNumericField("supplierPrice", event.target.value)}
             disabled
-            slotProps={{ htmlInput: { style: { direction: "rtl", textAlign: "right" } } }}
+            slotProps={{ htmlInput: { style: { direction: "rtl", textAlign: "start" } } }}
           />
           <TextField
             label="מלאי"
             type="number"
             value={form.stock}
             onChange={(event) => updateNumericField("stock", event.target.value)}
-            slotProps={{ htmlInput: { style: { direction: "rtl", textAlign: "right" } } }}
+            slotProps={{ htmlInput: { style: { direction: "rtl", textAlign: "start" } } }}
           />
           {form.imageUrl ? (
             <Box

@@ -8,7 +8,7 @@ export function ActiveOrdersCard(): JSX.Element {
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
-      <CardContent sx={{ p: 2.5, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+      <CardContent sx={{ p: 2.5, textAlign: "start", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
         <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.25 }}>
           הזמנות פעילות
         </Typography>

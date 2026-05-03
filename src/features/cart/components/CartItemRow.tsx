@@ -3,6 +3,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import { formatCurrency } from "../../../shared/lib/formatters";
 import type { CartItem } from "../types";
 
 interface CartItemRowProps {
@@ -17,6 +18,7 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: CartItem
     <TableRow>
       <TableCell>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Typography>{item.name}</Typography>
           <Avatar
             variant="rounded"
             src={item.imageUrl}
@@ -26,10 +28,9 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: CartItem
           >
             🖼️
           </Avatar>
-          <Typography>{item.name}</Typography>
         </Box>
       </TableCell>
-      <TableCell>{item.price.toFixed(2)}</TableCell>
+      <TableCell>{formatCurrency(item.price)}</TableCell>
       <TableCell>
         <IconButton size="small" onClick={onDecrease}>
           <RemoveIcon fontSize="small" />
@@ -41,7 +42,7 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: CartItem
           <AddIcon fontSize="small" />
         </IconButton>
       </TableCell>
-      <TableCell>{(item.price * item.quantity).toFixed(2)}</TableCell>
+      <TableCell>{formatCurrency(item.price * item.quantity)}</TableCell>
       <TableCell>
         <IconButton color="error" onClick={onRemove}>
           <DeleteIcon />

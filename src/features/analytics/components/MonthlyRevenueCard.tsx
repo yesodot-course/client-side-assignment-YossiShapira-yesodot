@@ -1,4 +1,5 @@
 ﻿import { Alert, Box, Card, CardContent, CircularProgress, Divider, Typography } from "@mui/material";
+import { formatCurrency } from "../../../shared/lib/formatters";
 import { useMonthlyRevenue } from "../hooks/useMonthlyRevenue";
 
 export function MonthlyRevenueCard(): JSX.Element {
@@ -6,7 +7,7 @@ export function MonthlyRevenueCard(): JSX.Element {
 
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
-      <CardContent sx={{ p: 2.5, textAlign: "right", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+      <CardContent sx={{ p: 2.5, textAlign: "start", direction: "rtl", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
         <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.25 }}>
           הכנסות חודשיות (30 ימים)
         </Typography>
@@ -21,7 +22,7 @@ export function MonthlyRevenueCard(): JSX.Element {
           </Alert>
         ) : (
           <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            ${(data?.revenue ?? 0).toFixed(2)}
+            {formatCurrency(data?.revenue ?? 0)}
           </Typography>
         )}
       </CardContent>

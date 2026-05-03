@@ -26,14 +26,21 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          textAlign: "right",
+          textAlign: "start",
+        },
+      },
+    },
+    MuiTable: {
+      styleOverrides: {
+        root: {
+          direction: "rtl",
         },
       },
     },
     MuiTableCell: {
       styleOverrides: {
         root: {
-          textAlign: "right",
+          textAlign: "start",
         },
       },
     },
@@ -41,7 +48,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           direction: "rtl",
-          textAlign: "right",
+          textAlign: "start",
         },
       },
     },
@@ -49,7 +56,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           direction: "rtl",
-          textAlign: "right",
+          textAlign: "start",
         },
       },
     },
@@ -63,7 +70,7 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         input: {
-          textAlign: "right",
+          textAlign: "start",
         },
       },
     },
@@ -71,7 +78,7 @@ const theme = createTheme({
       styleOverrides: {
         "html, body, #root": {
           direction: "rtl",
-          textAlign: "right",
+          textAlign: "start",
         },
       },
     },

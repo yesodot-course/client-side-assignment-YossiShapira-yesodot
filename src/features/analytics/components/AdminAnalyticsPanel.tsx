@@ -10,14 +10,14 @@ import { WeeklyCategoryCard } from "./WeeklyCategoryCard";
 export function AdminAnalyticsPanel(): JSX.Element {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
-      <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-end", textAlign: "right" }}>
+      <Typography variant="h5" sx={{ fontWeight: 700, alignSelf: "flex-start", textAlign: "start" }}>
         אנליטיקה
       </Typography>
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          flexDirection: "row-reverse",
+          flexDirection: "row",
           gap: 2.5,
           alignItems: "stretch",
           "& > *": {

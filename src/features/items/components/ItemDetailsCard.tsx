@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import { Box, Card, CardContent, CardMedia, Chip, Typography } from "@mui/material";
 
+import { formatCurrency } from "../../../shared/lib/formatters";
 import type { Item } from "../types";
 
 interface ItemDetailsCardProps {
@@ -34,8 +35,8 @@ export function ItemDetailsCard({ item }: ItemDetailsCardProps): JSX.Element {
           <Typography variant="h5">{item.name}</Typography>
           <Chip label={item.category} />
         </Box>
-        <Typography sx={{ mt: 2 }}>מחיר: ${item.price.toFixed(2)}</Typography>
-        <Typography>עלות ספק (לא מלאי): ${item.supplierPrice.toFixed(2)}</Typography>
+        <Typography sx={{ mt: 2 }}>מחיר: {formatCurrency(item.price)}</Typography>
+        <Typography>עלות ספק (לא מלאי): {formatCurrency(item.supplierPrice)}</Typography>
         <Typography>מלאי: {item.stock}</Typography>
         <Typography>ספק: {supplierName}</Typography>
         <Typography sx={{ mt: 2 }} color="text.secondary">
