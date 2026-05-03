@@ -78,23 +78,23 @@ export function SupplierTable(): JSX.Element {
               slotProps={{ htmlInput: { dir: "rtl" } }}
             />
           </Box>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer sx={{ direction: "rtl" }}>
+            <Table size="small" sx={{ direction: "rtl" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>שם</TableCell>
-                  <TableCell>פרטי קשר</TableCell>
-                  <TableCell>פריטי קטלוג</TableCell>
-                  <TableCell />
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>שם</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פרטי קשר</TableCell>
+                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פריטי קטלוג</TableCell>
+                  <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }} />
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows.map((supplier) => (
                   <TableRow key={supplier._id}>
-                    <TableCell>{supplier.name}</TableCell>
-                    <TableCell>{supplier.contactInfo}</TableCell>
-                    <TableCell>{supplier.items.length}</TableCell>
-                    <TableCell sx={{ width: 56 }}>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.name}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.contactInfo}</TableCell>
+                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.items.length}</TableCell>
+                    <TableCell sx={{ width: 56, textAlign: "center", verticalAlign: "middle" }}>
                       <IconButton
                         size="small"
                         aria-label="פעולות ספק"

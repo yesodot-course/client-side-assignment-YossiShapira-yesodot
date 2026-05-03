@@ -80,8 +80,8 @@ export function AdminItemsTable(): JSX.Element {
               slotProps={{ htmlInput: { dir: "rtl" } }}
             />
           </Box>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer sx={{ direction: "rtl" }}>
+            <Table size="small" sx={{ direction: "rtl" }}>
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>מלאי</TableCell>
