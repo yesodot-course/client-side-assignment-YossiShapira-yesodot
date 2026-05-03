@@ -1,7 +1,8 @@
-﻿import { Link } from "react-router-dom";
+﻿import { RiAdminLine } from "react-icons/ri";
+import { Link } from "react-router-dom";
 import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
-/** כפתורי ניווט בעגלה ובניהול — אימוג׳י בלבד; aria-label לקריאת מסך קוראים */
+/** עגלה: אימוג׳י | ניהול: Remix Icon RiAdminLine. aria-label לנגישות */
 export function AppHeader(): JSX.Element {
   return (
     <AppBar position="sticky" color="inherit" elevation={1}>
@@ -45,13 +46,14 @@ export function AppHeader(): JSX.Element {
             aria-label="לוח ניהול"
             sx={{
               minWidth: "auto",
-              fontSize: "1.35rem",
               lineHeight: 1,
               px: 0.65,
               py: 0.45,
+              color: "text.primary",
+              "& svg": { fontSize: "1.35rem", display: "block" },
             }}
           >
-            🛡️
+            <RiAdminLine aria-hidden />
           </Button>
         </Box>
       </Toolbar>
