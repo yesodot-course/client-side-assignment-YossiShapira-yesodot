@@ -100,9 +100,12 @@ export function SupplierDetailsPage(): JSX.Element {
         חזרה לספקים
       </Button>
       <Typography variant="h4">פרטי ספק</Typography>
-      <Paper variant="outlined" sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+      <Paper
+        variant="outlined"
+        sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}
+      >
         <SupplierEditorCore form={form} setForm={setForm} />
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", justifyContent: "flex-start" }}>
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", justifyContent: "flex-start", direction: "rtl" }}>
           <Button variant="contained" onClick={handleSave} disabled={updateMutation.isPending}>
             שמור שינויים
           </Button>

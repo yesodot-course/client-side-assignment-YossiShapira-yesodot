@@ -26,15 +26,20 @@ export function SupplierFormModal({ open, onClose, initialValue, submitLabel, on
   }, [initialValue, open]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      slotProps={{ paper: { sx: { direction: "rtl", textAlign: "start" } } }}
+    >
       <DialogTitle>טופס ספק</DialogTitle>
       <DialogContent>
         <Box sx={{ mt: 1 }}>
           <SupplierEditorCore form={form} setForm={setForm} />
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>ביטול</Button>
+      <DialogActions sx={{ justifyContent: "flex-start", gap: 1, px: 2, pb: 2, direction: "rtl" }}>
         <Button
           variant="contained"
           onClick={() => {
@@ -47,6 +52,7 @@ export function SupplierFormModal({ open, onClose, initialValue, submitLabel, on
         >
           {submitLabel}
         </Button>
+        <Button onClick={onClose}>ביטול</Button>
       </DialogActions>
     </Dialog>
   );
