@@ -17,17 +17,17 @@ export function CartItemRow({ item, onIncrease, onDecrease, onRemove }: CartItem
   return (
     <TableRow>
       <TableCell>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Typography>{item.name}</Typography>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, direction: "rtl" }}>
           <Avatar
             variant="rounded"
             src={item.imageUrl}
             alt={item.name}
-            sx={{ width: 48, height: 48, bgcolor: "grey.100", color: "text.secondary" }}
+            sx={{ width: 48, height: 48, flexShrink: 0, bgcolor: "grey.100", color: "text.secondary" }}
             slotProps={{ img: { style: { objectFit: "contain" } } }}
           >
             🖼️
           </Avatar>
+          <Typography sx={{ minWidth: 0, textAlign: "start" }}>{item.name}</Typography>
         </Box>
       </TableCell>
       <TableCell>{formatCurrency(item.price)}</TableCell>
