@@ -170,7 +170,7 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
           sx={rtlOutlinedTextFieldSx}
           slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
         />
-        <Typography variant="subtitle2" color="text.secondary" sx={{ width: "100%", textAlign: "start" }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ width: "100%", textAlign: "right" }}>
           פריטי קטלוג
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -178,47 +178,17 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
             <Paper
               key={index}
               variant="outlined"
-              sx={{ p: 1.25, width: "100%", boxSizing: "border-box" }}
-              style={{
+              sx={{
+                p: 1.25,
+                width: "100%",
+                boxSizing: "border-box",
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                gap: 12,
-                direction: "ltr",
+                gap: 1.5,
+                direction: "rtl",
               }}
             >
-              <Box style={{ flexShrink: 0 }}>
-                <IconButton
-                  size="small"
-                  aria-label="פעולות פריט קטלוג"
-                  onClick={(event) => {
-                    setActionAnchorEl(event.currentTarget);
-                    setActionIndex(index);
-                  }}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              </Box>
-              {/* Spacer eats space so name/price/image stay clustered on the right (LTR row: ⋮ … עלות | שם | תמונה) */}
-              <Box style={{ flex: "1 1 0%", minWidth: 0 }} aria-hidden />
-              <Typography variant="body2" color="text.secondary" dir="rtl" sx={{ whiteSpace: "nowrap", flexShrink: 0 }}>
-                עלות: {formatCurrency(catalogItem.price)}
-              </Typography>
-              <Typography
-                variant="subtitle2"
-                dir="rtl"
-                sx={{
-                  flexShrink: 1,
-                  minWidth: 0,
-                  maxWidth: { xs: "10rem", sm: "16rem" },
-                  textAlign: "right",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {catalogItem.itemName || "פריט ללא שם"}
-              </Typography>
               <Avatar
                 variant="rounded"
                 src={
@@ -239,13 +209,43 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
               >
                 🖼️
               </Avatar>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  flexShrink: 1,
+                  minWidth: 0,
+                  maxWidth: { xs: "10rem", sm: "16rem" },
+                  textAlign: "right",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {catalogItem.itemName || "פריט ללא שם"}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap", flexShrink: 0 }}>
+                עלות: {formatCurrency(catalogItem.price)}
+              </Typography>
+              <Box sx={{ flex: "1 1 0%", minWidth: 0 }} aria-hidden />
+              <Box sx={{ flexShrink: 0 }}>
+                <IconButton
+                  size="small"
+                  aria-label="פעולות פריט קטלוג"
+                  onClick={(event) => {
+                    setActionAnchorEl(event.currentTarget);
+                    setActionIndex(index);
+                  }}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </Box>
             </Paper>
           ))}
           <Button
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={openCreateCatalogDialog}
-            sx={{ alignSelf: "stretch", justifyContent: "center", direction: "rtl" }}
+            sx={{ alignSelf: "flex-start", width: "auto", justifyContent: "flex-start", direction: "rtl" }}
           >
             הוסף פריט קטלוג
           </Button>
