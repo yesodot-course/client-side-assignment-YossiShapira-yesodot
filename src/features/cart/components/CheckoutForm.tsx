@@ -7,6 +7,7 @@ import { ApiError } from "../../../shared/api/apiError";
 import { useCreateOrder } from "../../orders/hooks/useCreateOrder";
 import { useOrders } from "../../orders/hooks/useOrders";
 import { MAX_ITEMS_PER_CUSTOMER_LIFETIME, sumPastItemsQuantityForCustomer } from "../../orders/utils/orderCustomerLimits";
+import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../../../shared/ui/rtlOutlinedField";
 import { selectCartItems } from "../selectors/cart.selectors";
 import { clearCart } from "../store/cart.slice";
 
@@ -78,14 +79,31 @@ export function CheckoutForm(): JSX.Element {
   return (
     <Paper sx={{ p: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Typography variant="h6">סיום הזמנה</Typography>
+        <Typography variant="h6" sx={{ textAlign: "start" }}>
+          סיום הזמנה
+        </Typography>
         <TextField
           label="מזהה לקוח"
           value={customerId}
           onChange={(event) => setCustomerId(event.target.value)}
           required
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
         />
-        <TextField label="כתובת" value={address} onChange={(event) => setAddress(event.target.value)} required />
+        <TextField
+          label="כתובת"
+          value={address}
+          onChange={(event) => setAddress(event.target.value)}
+          required
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
+        />
         <Button variant="contained" onClick={handleSubmit} disabled={createOrderMutation.isPending}>
           בצע הזמנה
         </Button>
