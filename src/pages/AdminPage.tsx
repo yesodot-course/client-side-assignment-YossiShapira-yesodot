@@ -1,5 +1,5 @@
 ﻿import { Box, Paper, Tab, Tabs, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useItems } from "../features/items/hooks/useItems";
 import { AdminItemsTable } from "../features/items/components/AdminItemsTable";
@@ -7,14 +7,27 @@ import { SupplierTable } from "../features/suppliers/components/SupplierTable";
 import { AdminAnalyticsPanel } from "../features/analytics/components/AdminAnalyticsPanel";
 import { OrdersTable } from "../features/orders/components/OrdersTable";
 
+function tabIndexFromSearchParams(searchParams: URLSearchParams): number {
+  const tab = searchParams.get("tab");
+  if (tab === "suppliers") {
+    return 1;
+  }
+  if (tab === "orders") {
+    return 2;
+  }
+  if (tab === "analytics") {
+    return 3;
+  }
+  return 0;
+}
+
 export function AdminPage(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const { data } = useItems();
   const products = data ?? [];
   const lowStockItems = useMemo(() => products.filter((item) => item.stock < 5), [products]);
-  const tabFromQuery = searchParams.get("tab");
-  const initialTab = tabFromQuery === "suppliers" ? 1 : tabFromQuery === "orders" ? 2 : tabFromQuery === "analytics" ? 3 : 0;
-  const [activeTab, setActiveTab] = useState(initialTab);
+
+  const activeTab = useMemo(() => tabIndexFromSearchParams(searchParams), [searchParams]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
@@ -54,7 +67,6 @@ export function AdminPage(): JSX.Element {
         <Tabs
           value={activeTab}
           onChange={(_event, value: number) => {
-            setActiveTab(value);
             const nextTab = value === 0 ? "products" : value === 1 ? "suppliers" : value === 2 ? "orders" : "analytics";
             setSearchParams({ tab: nextTab });
           }}
