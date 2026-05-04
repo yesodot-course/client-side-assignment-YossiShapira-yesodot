@@ -12,6 +12,7 @@ import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../s
 import { ApiError } from "../shared/api/apiError";
 import type { CreateOrderItemInput, OrderItemRef } from "../features/orders/types";
 import { MAX_ITEMS_PER_CUSTOMER_LIFETIME, sumPastItemsQuantityForCustomer } from "../features/orders/utils/orderCustomerLimits";
+import { orderStatusLabelHe } from "../features/orders/utils/orderStatusLabel";
 
 type EditableOrderItem = {
   item: string;
@@ -175,7 +176,7 @@ export function OrderDetailsPage(): JSX.Element {
       </Button>
       <Typography variant="h4">פרטי הזמנה</Typography>
       <Paper variant="outlined" sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Typography variant="body2">סטטוס: {order.status ?? "Pending"}</Typography>
+        <Typography variant="body2">סטטוס: {orderStatusLabelHe(order.status)}</Typography>
         <Typography variant="body2">נפתחה: {order.openedAt ? new Date(order.openedAt).toLocaleString() : "-"}</Typography>
         <Typography variant="body2">נסגרה: {order.closedAt ? new Date(order.closedAt).toLocaleString() : "-"}</Typography>
         <TextField label="מזהה לקוח" value={customerId} onChange={(event) => setCustomerId(event.target.value)} disabled={isLocked} />

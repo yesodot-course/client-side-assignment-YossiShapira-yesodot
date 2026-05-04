@@ -23,6 +23,7 @@ import type { Order } from "../types";
 import { formatCurrency } from "../../../shared/lib/formatters";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { ApiError } from "../../../shared/api/apiError";
+import { orderStatusChipColor, orderStatusLabelHe } from "../utils/orderStatusLabel";
 
 /** `%` widths via colgroup; first column is visually right in RTL — sums to 100%. */
 const ORDERS_COL_WIDTH_PCT = [22, 11, 16, 18, 15, 18] as const;
@@ -172,11 +173,7 @@ export function OrdersTable(): JSX.Element {
                   <TableCell align="center">{getTotalItems(order)}</TableCell>
                   <TableCell align="right">{formatCurrency(order.totalPrice)}</TableCell>
                   <TableCell align="center">
-                    {(order.status ?? "Pending") === "Pending" ? (
-                      <Chip size="small" color="success" label="פעיל" />
-                    ) : (
-                      <Chip size="small" color="default" label="לא פעיל" />
-                    )}
+                    <Chip size="small" color={orderStatusChipColor(order.status)} label={orderStatusLabelHe(order.status)} />
                   </TableCell>
                   <TableCell sx={{ verticalAlign: "middle" }}>
                     <Box
