@@ -24,6 +24,7 @@ import { useItems } from "../../items/hooks/useItems";
 import type { SupplierInput } from "../types";
 import { formatCurrency } from "../../../shared/lib/formatters";
 import { showToast } from "../../../shared/ui/feedback/toast";
+import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../../../shared/ui/rtlOutlinedField";
 import { uploadSupplierImage } from "../api/supplier-image-upload.api";
 
 type CatalogItemDraft = {
@@ -146,8 +147,6 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
     setEditingCatalogIndex(null);
   };
 
-  const textFieldRtl = { htmlInput: { dir: "rtl" as const } };
-
   return (
     <Box dir="rtl" sx={{ direction: "rtl", textAlign: "start" }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -155,15 +154,23 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
           label="שם"
           value={form.name}
           onChange={(event) => setForm({ ...form, name: event.target.value })}
-          slotProps={textFieldRtl}
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
         />
         <TextField
           label="פרטי קשר"
           value={form.contactInfo}
           onChange={(event) => setForm({ ...form, contactInfo: event.target.value })}
-          slotProps={textFieldRtl}
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
         />
-        <Typography variant="subtitle2" color="text.secondary" sx={{ alignSelf: "flex-start" }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ width: "100%", textAlign: "start" }}>
           פריטי קטלוג
         </Typography>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -297,14 +304,22 @@ export function SupplierEditorCore({ form, setForm }: SupplierEditorCoreProps): 
               label="שם פריט בקטלוג"
               value={catalogDraft.itemName}
               onChange={(event) => setCatalogDraft((prev) => ({ ...prev, itemName: event.target.value }))}
-              slotProps={textFieldRtl}
+              variant="outlined"
+              fullWidth
+              dir="rtl"
+              sx={rtlOutlinedTextFieldSx}
+              slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
             />
             <TextField
               label="מחיר פריט בקטלוג"
               type="number"
               value={catalogDraft.price}
               onChange={(event) => setCatalogDraft((prev) => ({ ...prev, price: event.target.value }))}
-              slotProps={textFieldRtl}
+              variant="outlined"
+              fullWidth
+              dir="rtl"
+              sx={rtlOutlinedTextFieldSx}
+              slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
             />
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <Button component="label" variant="outlined" disabled={uploadingIndex !== null}>
