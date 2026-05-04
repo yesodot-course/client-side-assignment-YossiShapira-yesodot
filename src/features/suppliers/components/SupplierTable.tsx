@@ -82,13 +82,13 @@ export function SupplierTable(): JSX.Element {
               slotProps={{ htmlInput: { dir: "rtl", style: { textAlign: "right" } } }}
             />
           </Box>
-          <TableContainer dir="rtl" sx={{ direction: "rtl" }}>
-            <Table dir="rtl" size="small" sx={{ direction: "rtl" }}>
+          <TableContainer dir="rtl" sx={{ direction: "rtl", width: "100%" }}>
+            <Table dir="rtl" size="small" sx={{ direction: "rtl", width: "100%" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>שם</TableCell>
-                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פרטי קשר</TableCell>
-                  <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>פריטי קטלוג</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>שם</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>פרטי קשר</TableCell>
+                  <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>פריטי קטלוג</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -99,9 +99,9 @@ export function SupplierTable(): JSX.Element {
                     sx={{ cursor: "pointer" }}
                     onClick={() => navigate(`/suppliers/${supplier._id}`)}
                   >
-                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.name}</TableCell>
-                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.contactInfo}</TableCell>
-                    <TableCell sx={{ textAlign: "end", verticalAlign: "middle" }}>{supplier.items.length}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{supplier.name}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{supplier.contactInfo}</TableCell>
+                    <TableCell sx={{ textAlign: "start", verticalAlign: "middle" }}>{supplier.items.length}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

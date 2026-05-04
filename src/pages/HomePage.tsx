@@ -1,5 +1,6 @@
 ﻿import { useMemo, useState } from "react";
-import { Alert, Box, CircularProgress, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Alert, Box, Button, CircularProgress, Typography } from "@mui/material";
 
 import { useItems } from "../features/items/hooks/useItems";
 import { useAppDispatch } from "../app/store/hooks";
@@ -84,6 +85,9 @@ export function HomePage(): JSX.Element {
         <Typography variant="h4" sx={{ textAlign: "start", flex: 1 }}>
           מוצרי החנות
         </Typography>
+        <Button component={Link} to="/cart" variant="outlined" color="primary" sx={{ flexShrink: 0, textTransform: "none" }}>
+          לעגלה
+        </Button>
       </Box>
 
       <ItemSearchBar value={search} onChange={setSearch} />

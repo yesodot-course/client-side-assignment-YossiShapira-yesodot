@@ -5,11 +5,13 @@ import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
 import { showToast } from "../../../shared/ui/feedback/toast";
 import { ApiError } from "../../../shared/api/apiError";
 import { useCreateOrder } from "../../orders/hooks/useCreateOrder";
+import { useOrders } from "../../orders/hooks/useOrders";
+import { MAX_ITEMS_PER_CUSTOMER_LIFETIME, sumPastItemsQuantityForCustomer } from "../../orders/utils/orderCustomerLimits";
+import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../../../shared/ui/rtlOutlinedField";
 import { selectCartItems } from "../selectors/cart.selectors";
 import { clearCart } from "../store/cart.slice";
 
 const MAX_UNIQUE_ORDER_ITEMS = 10;
-const MAX_TOTAL_ORDER_ITEMS = 50;
 
 export function CheckoutForm(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -17,6 +19,7 @@ export function CheckoutForm(): JSX.Element {
   const [customerId, setCustomerId] = useState("");
   const [address, setAddress] = useState("");
   const createOrderMutation = useCreateOrder();
+  const ordersQuery = useOrders();
 
   const handleSubmit = () => {
     if (items.length === 0) {
@@ -39,10 +42,16 @@ export function CheckoutForm(): JSX.Element {
       showToast("ניתן להזמין עד 10 פריטים שונים בכל הזמנה.");
       return;
     }
-    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-    if (totalQuantity > MAX_TOTAL_ORDER_ITEMS) {
-      showToast("ניתן להזמין עד 50 יחידות בסך הכל בכל הזמנה.");
-      return;
+    const cartTotalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+    if (!ordersQuery.isLoading) {
+      const pastQuantity = sumPastItemsQuantityForCustomer(ordersQuery.data ?? [], customerId.trim());
+      if (pastQuantity + cartTotalQuantity > MAX_ITEMS_PER_CUSTOMER_LIFETIME) {
+        const remaining = Math.max(0, MAX_ITEMS_PER_CUSTOMER_LIFETIME - pastQuantity);
+        showToast(
+          `למזהה לקוח זה כבר הוזמנו ${pastQuantity} יחידות בכל ההזמנות. בעגלה יש ${cartTotalQuantity} יחידות — ניתן להוסיף לכל היותר ${remaining} יחידות נוספות (מקסימום ${MAX_ITEMS_PER_CUSTOMER_LIFETIME} לכל לקוח).`
+        );
+        return;
+      }
     }
 
     createOrderMutation.mutate(
@@ -70,14 +79,31 @@ export function CheckoutForm(): JSX.Element {
   return (
     <Paper sx={{ p: 2 }}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <Typography variant="h6">סיום הזמנה</Typography>
+        <Typography variant="h6" sx={{ textAlign: "start" }}>
+          סיום הזמנה
+        </Typography>
         <TextField
           label="מזהה לקוח"
           value={customerId}
           onChange={(event) => setCustomerId(event.target.value)}
           required
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
         />
-        <TextField label="כתובת" value={address} onChange={(event) => setAddress(event.target.value)} required />
+        <TextField
+          label="כתובת"
+          value={address}
+          onChange={(event) => setAddress(event.target.value)}
+          required
+          variant="outlined"
+          fullWidth
+          dir="rtl"
+          sx={rtlOutlinedTextFieldSx}
+          slotProps={{ htmlInput: { ...rtlOutlinedTextFieldHtmlInputProps } }}
+        />
         <Button variant="contained" onClick={handleSubmit} disabled={createOrderMutation.isPending}>
           בצע הזמנה
         </Button>

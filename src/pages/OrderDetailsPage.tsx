@@ -4,12 +4,15 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrderDetails } from "../features/orders/hooks/useOrderDetails";
+import { useOrders } from "../features/orders/hooks/useOrders";
 import { useUpdateOrder } from "../features/orders/hooks/useUpdateOrder";
 import { useItems } from "../features/items/hooks/useItems";
 import { showToast } from "../shared/ui/feedback/toast";
 import { rtlOutlinedTextFieldHtmlInputProps, rtlOutlinedTextFieldSx } from "../shared/ui/rtlOutlinedField";
 import { ApiError } from "../shared/api/apiError";
 import type { CreateOrderItemInput, OrderItemRef } from "../features/orders/types";
+import { MAX_ITEMS_PER_CUSTOMER_LIFETIME, sumPastItemsQuantityForCustomer } from "../features/orders/utils/orderCustomerLimits";
+import { orderStatusLabelHe } from "../features/orders/utils/orderStatusLabel";
 
 type EditableOrderItem = {
   item: string;
@@ -17,7 +20,6 @@ type EditableOrderItem = {
 };
 
 const MAX_UNIQUE_ORDER_ITEMS = 10;
-const MAX_TOTAL_ORDER_ITEMS = 50;
 
 const getOrderItemId = (item: string | OrderItemRef): string => {
   if (typeof item === "string") {
@@ -30,6 +32,7 @@ export function OrderDetailsPage(): JSX.Element {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const orderQuery = useOrderDetails(id ?? "");
+  const ordersQuery = useOrders();
   const itemsQuery = useItems();
   const updateOrderMutation = useUpdateOrder();
 
@@ -89,9 +92,15 @@ export function OrderDetailsPage(): JSX.Element {
       return null;
     }
     const totalQuantity = parsed.reduce((sum, entry) => sum + entry.quantity, 0);
-    if (totalQuantity > MAX_TOTAL_ORDER_ITEMS) {
-      showToast("ניתן להזין עד 50 יחידות בסך הכל בכל הזמנה.");
-      return null;
+    if (!ordersQuery.isLoading && id) {
+      const pastQuantity = sumPastItemsQuantityForCustomer(ordersQuery.data ?? [], customerId.trim(), id);
+      if (pastQuantity + totalQuantity > MAX_ITEMS_PER_CUSTOMER_LIFETIME) {
+        const remaining = Math.max(0, MAX_ITEMS_PER_CUSTOMER_LIFETIME - pastQuantity);
+        showToast(
+          `למזהה לקוח זה כבר הוזמנו ${pastQuantity} יחידות בהזמנות אחרות. בהזמנה הנוכחית ${totalQuantity} יחידות — ניתן לכל היותר ${remaining} יחידות נוספות (מקסימום ${MAX_ITEMS_PER_CUSTOMER_LIFETIME} לכל לקוח).`
+        );
+        return null;
+      }
     }
     return parsed;
   };
@@ -159,7 +168,7 @@ export function OrderDetailsPage(): JSX.Element {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
       <Button
         variant="text"
-        endIcon={<ArrowForwardIosIcon fontSize="small" />}
+        startIcon={<ArrowForwardIosIcon fontSize="small" />}
         sx={{ alignSelf: "flex-start" }}
         onClick={() => navigate("/admin?tab=orders")}
       >
@@ -167,7 +176,7 @@ export function OrderDetailsPage(): JSX.Element {
       </Button>
       <Typography variant="h4">פרטי הזמנה</Typography>
       <Paper variant="outlined" sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Typography variant="body2">סטטוס: {order.status ?? "Pending"}</Typography>
+        <Typography variant="body2">סטטוס: {orderStatusLabelHe(order.status)}</Typography>
         <Typography variant="body2">נפתחה: {order.openedAt ? new Date(order.openedAt).toLocaleString() : "-"}</Typography>
         <Typography variant="body2">נסגרה: {order.closedAt ? new Date(order.closedAt).toLocaleString() : "-"}</Typography>
         <TextField label="מזהה לקוח" value={customerId} onChange={(event) => setCustomerId(event.target.value)} disabled={isLocked} />
