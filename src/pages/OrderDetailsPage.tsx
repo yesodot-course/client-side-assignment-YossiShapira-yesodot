@@ -167,7 +167,7 @@ export function OrderDetailsPage(): JSX.Element {
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, direction: "rtl", textAlign: "start" }}>
       <Button
         variant="text"
-        endIcon={<ArrowForwardIosIcon fontSize="small" />}
+        startIcon={<ArrowForwardIosIcon fontSize="small" />}
         sx={{ alignSelf: "flex-start" }}
         onClick={() => navigate("/admin?tab=orders")}
       >
