@@ -26,8 +26,8 @@
     "stylis": "^4.4.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@types/stylis": "^4.2.7",
     "@vitejs/plugin-react": "^5.1.0",
     "typescript": "^5.9.3",

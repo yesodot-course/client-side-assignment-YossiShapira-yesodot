@@ -3,9 +3,18 @@
 import { env } from "../config/env";
 import { ApiError } from "./apiError";
 
+function extractApiErrorMessage(data: unknown): string | undefined {
+  if (!data || typeof data !== "object" || !("message" in data)) {
+    return undefined;
+  }
+
+  const message = (data as { message?: unknown }).message;
+  return typeof message === "string" ? message : undefined;
+}
+
 export const httpClient = axios.create({
   baseURL: env.apiBaseUrl,
-  timeout: 10000,
+  timeout: env.apiTimeoutMs,
 });
 
 httpClient.interceptors.response.use(
@@ -13,8 +22,10 @@ httpClient.interceptors.response.use(
   (error: unknown) => {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status ?? 500;
-      const data = error.response?.data as { message?: string } | undefined;
-      const message = data?.message ?? error.message ?? "שגיאת שרת";
+      const message =
+        extractApiErrorMessage(error.response?.data) ??
+        error.message ??
+        "שגיאת שרת";
       return Promise.reject(new ApiError(message, status));
     }
     return Promise.reject(new ApiError("שגיאה לא צפויה", 500));
